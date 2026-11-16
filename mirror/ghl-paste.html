@@ -432,6 +432,42 @@ body.view-wide #hud-toast{left:calc((100vw - var(--hud-w))/2);}
 body.view-phone #hud-toast{top:auto;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,140%);}
 body.view-phone #hud-toast.show{transform:translate(-50%,0);}
 @media (prefers-reduced-motion:reduce){.hud-ring.bump,.cbox.on,.pattern-row.selected .pattern-check{animation:none;}}
+
+/* ===== CHAP-V1: guided chapters and the Mirror Card ===== */
+.chap{display:none;}
+.chap.on{display:block;animation:fadeIn .45s ease;}
+.chap-bar{margin:1.25rem 0 .5rem;}
+.chap-segs{display:flex;gap:6px;}
+.chap-seg{flex:1;height:28px;background:none;border:0;padding:11px 0;cursor:pointer;}
+.chap-seg::before{content:'';display:block;height:6px;border-radius:99px;background:#2a2a2a;transition:background .3s,box-shadow .3s;}
+.chap-seg.done::before{background:var(--gold-dim);}
+.chap-seg.on::before{background:var(--gold);box-shadow:0 0 12px rgba(201,168,76,.6);}
+.chap-seg:focus-visible{outline:2px solid var(--gold-light);outline-offset:2px;border-radius:8px;}
+.chap-label{display:flex;justify-content:space-between;gap:1rem;font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--bone-dim);margin-top:.15rem;}
+.chap-label b{color:var(--gold);font-weight:500;}
+.chap-label span:first-child{white-space:nowrap;flex-shrink:0;}
+.chap-label span:last-child{text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chap-nav{margin-top:2.75rem;padding-top:1.5rem;border-top:1px solid var(--ash);}
+.chap-next-line{font-size:.92rem;color:var(--bone-dim);margin-bottom:.8rem;}
+.chap-next-line b{color:var(--white);font-weight:600;}
+.chap-btns{display:flex;gap:10px;}
+.chap-btns .btn-ghost{flex:0 0 auto;padding:.85rem 1.2rem;}
+.chap-btns .btn-gold{flex:1;}
+.chap .section-hdr{padding-top:1rem;margin-top:0 !important;}
+.chap-back-last{margin:.75rem auto 0;justify-content:center;}
+
+#mcard{max-width:520px;margin:0 auto 2rem;text-align:center;border:1px solid var(--gold-dim);border-radius:18px;padding:1.75rem 1.5rem 1.5rem;background:radial-gradient(120% 80% at 50% 0%,rgba(201,168,76,.14),transparent 60%),linear-gradient(180deg,#171717,#0d0d0d);box-shadow:0 30px 60px -30px #000,0 0 0 1px rgba(255,255,255,.03) inset;}
+#mcard .mc-ring{width:150px;height:150px;margin:1rem auto .9rem;position:relative;}
+#mcard .mc-ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+#mcard .mc-ring circle{fill:none;stroke-width:9;}
+#mcard .mc-ring .t{stroke:#262626;}
+#mcard .mc-ring .a{stroke:url(#hudGold);stroke-linecap:round;stroke-dasharray:326.73;stroke-dashoffset:326.73;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 0 8px rgba(201,168,76,.6));}
+#mcard .mc-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:3.4rem;color:var(--gold-light);}
+#mcard .mc-level{font-family:'Bebas Neue',sans-serif;font-size:2.1rem;letter-spacing:.06em;line-height:1;}
+#mcard .mc-sub{font-size:.95rem;color:var(--bone);margin:.5rem 0 1.25rem;}
+#mcard .mc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem;}
+#mcard .mc-phase{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
+#mcard .mc-note{font-size:.82rem;color:var(--bone-dim);margin-top:.75rem;}
 </style>
 <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
 <div class="top-nav">
@@ -1743,7 +1779,8 @@ window.addEventListener('load', restoreProgress);
     $('hudArc').style.strokeDashoffset = (326.73 * (1 - d.score/100)).toFixed(2);
     $('hudNum').textContent = d.score;
     $('hudLevel').innerHTML = '<small>LEVEL ' + (lvl+1) + '</small>' + LEVELS[lvl][1];
-    $('hudHint').textContent = d.sent ? 'Done. Your work is on its way.' : (HINTS[d.id] || '');
+    var ci = (d.id === 's-content' && window.mirrorChapInfo) ? window.mirrorChapInfo() : null;
+    $('hudHint').textContent = d.sent ? 'Done. Your work is on its way.' : (ci ? 'Chapter ' + ci.i + ' of ' + ci.n + '. Be honest, then continue.' : (HINTS[d.id] || ''));
     $('hudTruths').textContent = d.truths; $('hudLines').textContent = d.lines; $('hudPct').textContent = d.pct;
     var lis = $('hudSteps').children;
     for(var i=0;i<lis.length;i++){
@@ -1765,5 +1802,137 @@ window.addEventListener('load', restoreProgress);
   var rs = $('resume-reset'); if(rs) rs.addEventListener('click', function(){ try{ localStorage.removeItem(HUD_KEY); }catch(e){} }, true);
   window.addEventListener('load', function(){ setTimeout(function(){ first = true; render(); }, 60); });
   render();
+})();
+</script>
+
+<script>
+/* CHAP-V1: guided chapters for the mirror, and the Mirror Card. Display only. */
+(function(){
+  var KEY = 'mirror_chap_v1', saved = {}, P = {};
+  try{ saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }catch(e){}
+  function el(tag, cls, html){ var e = document.createElement(tag); if(cls) e.className = cls; if(html != null) e.innerHTML = html; return e; }
+  function clean(t){ return (t || '').replace(/\s+/g,' ').trim(); }
+
+  document.querySelectorAll('.phase-content').forEach(function(pc){
+    var n = +pc.id.slice(1), kids = [].slice.call(pc.children), chaps = [], c = null;
+    kids.forEach(function(k){
+      if(!c || k.classList.contains('section-hdr')){ c = el('section','chap'); chaps.push(c); }
+      c.appendChild(k);
+    });
+    var titles = chaps.map(function(ch, i){
+      if(i === 0) return 'Where you stand';
+      var h = ch.querySelector('.section-hdr h2, .section-hdr .h2'); return clean(h ? h.innerHTML.replace(/<br\s*\/?>/gi,' ').replace(/<[^>]+>/g,'') : 'Chapter ' + (i+1)).replace(/&amp;/g,'&').replace(/&#39;|&apos;/g,"'");
+    });
+    var bar = el('div','chap-bar'), segs = el('div','chap-segs');
+    segs.setAttribute('role','group'); segs.setAttribute('aria-label','Chapters');
+    chaps.forEach(function(ch, i){
+      var s = el('button','chap-seg'); s.type = 'button'; s.setAttribute('aria-label','Chapter ' + (i+1) + ': ' + titles[i]);
+      s.addEventListener('click', function(){ show(n, i, true); }); segs.appendChild(s);
+    });
+    var label = el('div','chap-label','<span></span><span></span>');
+    bar.appendChild(segs); bar.appendChild(label); pc.appendChild(bar);
+    chaps.forEach(function(ch, i){
+      pc.appendChild(ch);
+      if(i < chaps.length - 1){
+        var nav = el('div','chap-nav');
+        nav.appendChild(el('p','chap-next-line','Up next: <b></b>')); nav.querySelector('b').textContent = titles[i+1];
+        var row = el('div','chap-btns');
+        if(i > 0){ var b = el('button','btn btn-ghost','←'); b.type = 'button'; b.setAttribute('aria-label','Previous chapter'); b.addEventListener('click', function(){ show(n, i-1, true); }); row.appendChild(b); }
+        var g = el('button','btn btn-gold','CONTINUE →'); g.type = 'button'; g.addEventListener('click', function(){ show(n, i+1, true); if(typeof track === 'function') track('mirror_chapter', { phase: n, chapter: i+2 }); });
+        row.appendChild(g); nav.appendChild(row); ch.appendChild(nav);
+      } else {
+        var ns = ch.querySelector('.next-section');
+        var bk = el('button','back-btn chap-back-last','← Previous chapter'); bk.type = 'button'; bk.addEventListener('click', function(){ show(n, i-1, true); });
+        if(ns) ns.appendChild(bk);
+      }
+    });
+    P[n] = { chaps: chaps, titles: titles, segs: [].slice.call(segs.children), label: label, i: 0 };
+  });
+
+  function show(n, i, scroll){
+    var p = P[n]; if(!p) return;
+    i = Math.max(0, Math.min(p.chaps.length - 1, i|0)); p.i = i;
+    p.chaps.forEach(function(ch, k){ ch.classList.toggle('on', k === i); });
+    p.segs.forEach(function(s, k){ s.className = 'chap-seg' + (k === i ? ' on' : (k < i ? ' done' : '')); if(k === i) s.setAttribute('aria-current','step'); else s.removeAttribute('aria-current'); });
+    p.label.firstChild.innerHTML = 'Chapter <b>' + (i+1) + '</b> of ' + p.chaps.length;
+    p.label.lastChild.textContent = p.titles[i];
+    saved[n] = i; try{ localStorage.setItem(KEY, JSON.stringify(saved)); }catch(e){}
+    if(scroll) window.scrollTo(0, 0);
+    document.dispatchEvent(new Event('change'));
+  }
+  window.mirrorChapter = function(i){ if(typeof phase !== 'undefined' && phase) show(phase, i, false); };
+  window.mirrorChapInfo = function(){ if(typeof phase === 'undefined' || !phase || !P[phase]) return null; return { i: P[phase].i + 1, n: P[phase].chaps.length }; };
+  if(typeof window.enterPhase === 'function'){
+    var _ep = window.enterPhase;
+    window.enterPhase = function(){ var r = _ep.apply(this, arguments); if(typeof phase !== 'undefined' && phase) show(phase, saved[phase] || 0, false); return r; };
+  }
+  Object.keys(P).forEach(function(n){ show(+n, saved[n] || 0, false); });
+  var rs = document.getElementById('resume-reset'); if(rs) rs.addEventListener('click', function(){ try{ localStorage.removeItem(KEY); }catch(e){} }, true);
+
+  // ── Mirror Card ──
+  var cta = document.querySelector('#s-cta .wrap'), anchor = cta && cta.querySelector('.card');
+  if(!cta || !anchor) return;
+  var card = el('div','', '<span class="eyebrow">Your Mirror Card</span>'
+    + '<div class="mc-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="t" cx="60" cy="60" r="52"/><circle class="a" id="mcArc" cx="60" cy="60" r="52"/></svg><b id="mcNum">0</b></div>'
+    + '<div class="mc-phase" id="mcPhase"></div><div class="mc-level" id="mcLevel"></div>'
+    + '<p class="mc-sub" id="mcSub"></p>'
+    + '<div class="mc-grid"><div class="hud-stat"><b id="mcPct">?</b><span>your number</span></div><div class="hud-stat"><b id="mcTruths">0</b><span>truths faced</span></div><div class="hud-stat"><b id="mcLines">0</b><span>answers written</span></div></div>'
+    + '<button type="button" class="btn btn-gold btn-full" id="mcSave">SAVE MY CARD</button>'
+    + '<p class="mc-note">Your written answers stay private. The card shows only the numbers above.</p>');
+  card.id = 'mcard'; cta.insertBefore(card, anchor);
+  var $ = function(id){ return document.getElementById(id); };
+  function data(){
+    var lv = $('hudLevel'), small = lv.querySelector('small');
+    return { score: +$('hudNum').textContent || 0, levelNo: clean(small ? small.textContent : ''), level: clean(lv.textContent.replace(small ? small.textContent : '', '')),
+      pct: $('hudPct').textContent, truths: $('hudTruths').textContent, lines: $('hudLines').textContent,
+      phase: (typeof PHASE_NAMES !== 'undefined' && typeof phase !== 'undefined' && PHASE_NAMES[phase]) || '', name: (typeof userName !== 'undefined' && userName) || '' };
+  }
+  function fill(){
+    var d = data();
+    $('mcNum').textContent = d.score; $('mcArc').style.strokeDashoffset = (326.73 * (1 - d.score/100)).toFixed(2);
+    $('mcPhase').textContent = d.phase.replace(/\s*[\u2014\u2013-]\s*/g, ' · '); $('mcLevel').textContent = d.levelNo + ' · ' + d.level;
+    $('mcSub').textContent = (d.name ? d.name + ', you' : 'You') + ' looked in the mirror and did not look away.';
+    $('mcPct').textContent = d.pct; $('mcTruths').textContent = d.truths; $('mcLines').textContent = d.lines;
+  }
+  document.addEventListener('click', function(){ setTimeout(function(){ if(document.getElementById('s-cta').classList.contains('active')) fill(); }, 220); });
+  function draw(){
+    var d = data(), W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var x = cv.getContext('2d');
+    x.fillStyle = '#0d0d0d'; x.fillRect(0,0,W,H);
+    var g = x.createRadialGradient(W/2, 250, 40, W/2, 250, 800); g.addColorStop(0,'rgba(201,168,76,.22)'); g.addColorStop(1,'rgba(201,168,76,0)'); x.fillStyle = g; x.fillRect(0,0,W,H);
+    x.strokeStyle = '#8a6e30'; x.lineWidth = 4; x.strokeRect(40,40,W-80,H-80);
+    x.textAlign = 'center';
+    x.fillStyle = '#C9A84C'; x.font = '500 30px "DM Mono", monospace'; x.fillText('T H E   M I R R O R', W/2, 150);
+    var cx = W/2, cy = 440, r = 190;
+    x.lineWidth = 30; x.strokeStyle = '#262626'; x.beginPath(); x.arc(cx,cy,r,0,Math.PI*2); x.stroke();
+    var gg = x.createLinearGradient(cx-r,cy-r,cx+r,cy+r); gg.addColorStop(0,'#f1d98a'); gg.addColorStop(1,'#a8842f');
+    x.strokeStyle = gg; x.lineCap = 'round'; x.shadowColor = 'rgba(201,168,76,.6)'; x.shadowBlur = 30;
+    if(d.score > 0){ x.beginPath(); x.arc(cx,cy,r,-Math.PI/2,-Math.PI/2 + Math.PI*2*d.score/100); x.stroke(); }
+    x.shadowBlur = 0;
+    x.fillStyle = '#e8c96a'; x.font = '190px "Bebas Neue", sans-serif'; x.textBaseline = 'middle'; x.fillText(String(d.score), cx, cy + 12); x.textBaseline = 'alphabetic';
+    x.fillStyle = '#C9A84C'; x.font = '500 28px "DM Mono", monospace'; x.fillText(d.phase.toUpperCase().replace(/\s*[—–-]\s*/g, '  ·  '), W/2, 740);
+    x.fillStyle = '#f0ece4'; x.font = '110px "Bebas Neue", sans-serif'; x.fillText(d.levelNo + ' · ' + d.level, W/2, 860);
+    var cols = [[d.pct,'YOUR NUMBER'],[d.truths,'TRUTHS FACED'],[d.lines,'ANSWERS WRITTEN']];
+    cols.forEach(function(c, i){ var bx = 110 + i*295, by = 940; x.fillStyle = '#141414'; x.strokeStyle = '#2a2a2a'; x.lineWidth = 2; x.beginPath(); x.roundRect ? x.roundRect(bx,by,270,190,22) : x.rect(bx,by,270,190); x.fill(); x.stroke();
+      x.fillStyle = '#e8c96a'; x.font = '96px "Bebas Neue", sans-serif'; x.fillText(c[0], bx+135, by+105);
+      x.fillStyle = '#a39889'; x.font = '500 20px "DM Mono", monospace'; x.fillText(c[1], bx+135, by+155); });
+    x.fillStyle = '#ddd5c8'; x.font = '500 32px "Hanken Grotesk", sans-serif'; x.fillText((d.name ? d.name + ' looked' : 'I looked') + ' in the mirror and did not look away.', W/2, 1215);
+    x.fillStyle = '#8a6e30'; x.font = '500 24px "DM Mono", monospace'; x.fillText('@MRUNSTUCK  ·  JOINUNSTUCK.COM/MIRROR', W/2, 1275);
+    return cv;
+  }
+  $('mcSave').addEventListener('click', function(){
+    var btn = this; if(typeof track === 'function') track('mirror_card_save', {});
+    var go2 = function(){
+      draw().toBlob(function(blob){
+        if(!blob) return;
+        var file = null; try{ file = new File([blob], 'my-mirror-card.png', { type: 'image/png' }); }catch(e){}
+        if(file && navigator.canShare && navigator.canShare({ files: [file] })){ navigator.share({ files: [file], title: 'My Mirror Card' }).catch(function(){}); return; }
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'my-mirror-card.png'; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+        btn.textContent = 'SAVED ✓'; setTimeout(function(){ btn.textContent = 'SAVE MY CARD'; }, 2200);
+      }, 'image/png');
+    };
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(go2);
+  });
+  window.mirrorCardCanvas = draw;
 })();
 </script>
