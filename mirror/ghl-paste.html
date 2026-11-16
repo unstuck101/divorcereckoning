@@ -283,6 +283,9 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   #s-phase .phase-card .tags{margin-bottom:.15rem;}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
+
+#resume-bar{border:1px solid var(--gold-dim);background:rgba(201,168,76,.06);padding:1.25rem;margin:1.25rem 0 0;text-align:center;}
+#resume-bar .resume-line{font-size:1rem;margin:.5rem 0 1rem;line-height:1.5;}
 </style>
 <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
 <div class="top-nav">
@@ -300,6 +303,13 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     <span class="eyebrow">Mr. Unstuck · Divorce Reckoning Tool</span>
     <h1 class="h1">THE <span class="gold">MIRROR</span></h1>
     <p class="body start-line">Where are you right now? Tap the one that finds you and see your mirror. No email needed to look.</p>
+  </div>
+
+  <div id="resume-bar" style="display:none;">
+    <span class="eyebrow">Welcome back</span>
+    <p class="body resume-line">Your work is saved on this device. You were in <span class="gold" id="resume-phase"></span>.</p>
+    <button class="btn btn-gold btn-full" id="resume-go">PICK UP WHERE I LEFT OFF →</button>
+    <button class="back-btn" id="resume-reset" style="margin:.75rem auto 0;justify-content:center;">Start over</button>
   </div>
 
   <div class="phase-cards-wrap">
@@ -1452,4 +1462,45 @@ function sendResults(){
   document.getElementById('results-email-confirm').textContent =
     'Your results are on their way. Check your inbox — and if you don\'t see it in a few minutes, check your spam folder.';
 }
+
+// ── SAVES AS HE GOES: closing the tab does not cost him his work ──
+const SAVE_KEY = 'mirror_progress_v1';
+function fieldsAll(){ return [...document.querySelectorAll('textarea, input.ws-input')].filter(e=>!['intake-name','intake-email','results-email','declDate'].includes(e.id)); }
+function snapshot(){
+  const sl = document.getElementById('ownSlider');
+  return { t:Date.now(), phase, cur, userName, userEmail, pct: sl ? sl.value : null,
+    f: fieldsAll().map(e=>e.value),
+    c: [...document.querySelectorAll('.check-list li')].map(l=>l.classList.contains('done')?1:0),
+    p: [...document.querySelectorAll('.pattern-row')].map(r=>r.classList.contains('selected')?1:0),
+    s: [...document.querySelectorAll('.scale-btn')].map(b=>b.classList.contains('active')?1:0) };
+}
+let saveT = null, saveOff = false;
+function saveSoon(){ if(saveOff) return; clearTimeout(saveT); saveT = setTimeout(()=>{ try{ if(phase) localStorage.setItem(SAVE_KEY, JSON.stringify(snapshot())); }catch(e){} }, 400); }
+['input','click','keyup'].forEach(ev=>document.addEventListener(ev, saveSoon));
+function restoreProgress(){
+  let d = null; try{ d = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); }catch(e){}
+  if(!d || !d.phase || !d.cur || d.cur === 's-phase' || Date.now() - d.t > 30*864e5) return;
+  userName = d.userName || ''; userEmail = d.userEmail || '';
+  fieldsAll().forEach((e,i)=>{ if(d.f && typeof d.f[i] === 'string') e.value = d.f[i]; });
+  document.querySelectorAll('.check-list li').forEach((l,i)=>{ const on = !!(d.c && d.c[i]); l.classList.toggle('done', on); const b = l.querySelector('.cbox'); if(b) b.classList.toggle('on', on); });
+  document.querySelectorAll('.pattern-row').forEach((r,i)=>r.classList.toggle('selected', !!(d.p && d.p[i])));
+  document.querySelectorAll('.scale-btn').forEach((b,i)=>b.classList.toggle('active', !!(d.s && d.s[i])));
+  calcTRScore();
+  const sl = document.getElementById('ownSlider'); if(sl && d.pct){ sl.value = d.pct; slide(d.pct); }
+  const n = document.getElementById('intake-name'), em = document.getElementById('intake-email'), re = document.getElementById('results-email');
+  if(n) n.value = userName; if(em) em.value = userEmail; if(re) re.value = userEmail;
+  updateDecl();
+  const bar = document.getElementById('resume-bar');
+  if(!bar) return;
+  document.getElementById('resume-phase').textContent = PHASE_NAMES[d.phase] || '';
+  bar.style.display = 'block';
+  document.getElementById('resume-go').onclick = ()=>{
+    track('mirror_resume', { phase: d.phase });
+    pickPhase(d.phase); enterPhase();
+    const to = (d.cur === 's-gate' || !SCREENS.includes(d.cur)) ? 's-content' : d.cur;
+    if(to !== 's-content') go(to);
+  };
+  document.getElementById('resume-reset').onclick = ()=>{ saveOff = true; clearTimeout(saveT); try{ localStorage.removeItem(SAVE_KEY); }catch(e){} location.reload(); };
+}
+window.addEventListener('load', restoreProgress);
 </script>

@@ -27,3 +27,5 @@ Put it live on divorce.joinunstuck.com (GoHighLevel pages cannot be edited from 
 1. Open the funnel page in the GoHighLevel builder, find the Custom JS/HTML element that holds the tool.
 2. Select all of its code and replace it with the whole of `mirror/ghl-paste.html`. Save and publish.
 3. Open the page on a phone: the first thing you should see is the three phases, not a form. Tap one, tap Next, and the name and email screen should appear before ownership. Use a test email; the webhook starts the same workflow as before.
+- Saves as he goes (added 2026-11-16): answers, checks, percentage and the screen he was on are kept on his device (`mirror_progress_v1`, 30 days). A returning man sees "Pick up where I left off" or "Start over", and is not asked for his email twice. Event: `mirror_resume`.
+- Also served at https://joinunstuck.com/mirror/ (copied into the joinunstuck-site repo).
