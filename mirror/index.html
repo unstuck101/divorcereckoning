@@ -1,0 +1,1465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>THE MIRROR | Mr. Unstuck Divorce Reckoning Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d0d0d;
+  --ink2: #111;
+  --ink3: #161616;
+  --ash: #242424;
+  --smoke: #333;
+  --gold: #C9A84C;
+  --gold-dim: #8a6e30;
+  --gold-light: #e8c96a;
+  --bone: #c8bfb0;
+  --bone-dim: #7a6e62;
+  --white: #f0ece4;
+  --red: #7a1c1c;
+  --red-light: #b05050;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--white);font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5;}
+
+/* PROGRESS */
+.prog-wrap{position:fixed;top:0;left:0;right:0;height:2px;background:var(--ash);z-index:9000;}
+.prog-fill{height:100%;background:var(--gold);transition:width .5s ease;width:0%;}
+
+/* NAV */
+.top-nav{position:fixed;top:0;left:0;right:0;padding:.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;z-index:8999;background:linear-gradient(to bottom,rgba(13,13,13,.98) 70%,transparent);}
+.nav-logo{width:38px;height:38px;object-fit:contain;flex-shrink:0;}
+.nav-step{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;color:var(--bone-dim);text-transform:uppercase;}
+
+/* INTAKE SCREEN */
+.intake-wrap{max-width:520px;margin:0 auto;}
+.intake-hero{text-align:center;padding:2.5rem 0 2rem;}
+.intake-logo{width:90px;height:90px;object-fit:contain;margin:0 auto 1.5rem;display:block;}
+.intake-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);margin:2rem 0;}
+.intake-card{background:var(--ink2);border:1px solid var(--ash);padding:2rem;margin-top:1.5rem;}
+.intake-error{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;color:#b05050;margin-top:.5rem;display:none;}
+.intake-privacy{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.12em;color:var(--bone-dim);text-align:center;margin-top:1.25rem;line-height:1.6;}
+
+/* SCREENS */
+.screen{display:none;min-height:100vh;animation:fadeIn .55s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+/* LAYOUT */
+.wrap{max-width:740px;margin:0 auto;padding:0 1.5rem;}
+.wrap-wide{max-width:960px;margin:0 auto;padding:0 1.5rem;}
+.pt{padding-top:5.5rem;}
+.pb{padding-bottom:5rem;}
+
+/* TYPE */
+.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:.04em;}
+.mono{font-family:'DM Mono',monospace;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.5rem;}
+.h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,10vw,5.5rem);line-height:.9;letter-spacing:.03em;margin-bottom:1.25rem;}
+.h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.2rem);line-height:.95;letter-spacing:.04em;margin-bottom:1rem;}
+.h3{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.05em;margin-bottom:.6rem;}
+.gold{color:var(--gold);}
+.body{font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.8;color:var(--bone);}
+.body-sm{font-size:1rem;line-height:1.75;color:var(--bone);}
+
+/* DIVIDERS */
+.gold-rule{width:52px;height:2px;background:var(--gold);margin:1.25rem 0;}
+.gold-rule.center{margin:1.25rem auto;}
+.hr{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--smoke),transparent);margin:2.5rem 0;}
+
+/* BUTTONS */
+.btn{display:inline-block;font-family:'Bebas Neue',sans-serif;letter-spacing:.12em;border:none;cursor:pointer;text-decoration:none;transition:all .2s ease;text-align:center;}
+.btn-gold{background:var(--gold);color:var(--ink);padding:.9rem 2.2rem;font-size:1.05rem;}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--gold);padding:.85rem 2rem;font-size:1rem;border:1px solid var(--gold-dim);}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(201,168,76,.07);}
+.btn-full{width:100%;display:block;padding:1.1rem 2rem;font-size:1.1rem;}
+.back-btn{background:none;border:none;color:var(--bone-dim);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;cursor:pointer;text-transform:uppercase;padding:.4rem 0;transition:color .2s;display:flex;align-items:center;gap:.4rem;}
+.back-btn:hover{color:var(--gold);}
+
+/* CARDS */
+.card{background:var(--ink2);border:1px solid var(--ash);padding:2rem;}
+.card-gold{border-color:var(--gold-dim);}
+
+/* PULL QUOTE */
+.pull-quote{padding:0 0 0 1.75rem;border-left:3px solid var(--gold);margin:2.5rem 0;}
+.pull-quote p{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,4vw,2.1rem);letter-spacing:.04em;color:var(--white);line-height:1.15;}
+
+/* SCRIPTURE */
+.scripture{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--gold-dim);border-bottom:1px solid var(--gold-dim);margin:2.5rem 0;}
+.scripture .verse{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--white);line-height:1.7;margin-bottom:.7rem;}
+.scripture .ref{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase;}
+
+/* STOIC */
+.stoic{text-align:center;padding:2rem;border-top:1px solid var(--ash);border-bottom:1px solid var(--ash);margin:2.5rem 0;}
+.stoic .q{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;color:var(--bone);line-height:1.7;margin-bottom:.6rem;}
+.stoic .attr{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--bone-dim);text-transform:uppercase;}
+
+/* ALERT */
+.alert{padding:1.5rem;background:rgba(122,28,28,.09);border:1px solid rgba(122,28,28,.35);margin:2rem 0;}
+.alert p{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#b08080;line-height:1.75;font-style:italic;}
+
+/* TRUTH BLOCK */
+.truth-block{margin:2.5rem 0;padding:2rem;border:1px solid var(--ash);background:var(--ink2);position:relative;}
+.truth-block::before{content:attr(data-label);position:absolute;top:-.75rem;left:1.5rem;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;color:var(--gold);background:var(--ink);padding:0 .5rem;text-transform:uppercase;}
+.truth-block h4{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:.05em;color:var(--white);margin-bottom:.6rem;}
+.truth-block p{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bone);line-height:1.78;}
+
+/* CONTRAST */
+.contrast{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin:1.5rem 0;background:var(--ash);}
+.contrast-cell{padding:1.25rem;font-family:'Cormorant Garamond',serif;font-size:.97rem;line-height:1.65;}
+.contrast-cell .clabel{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;display:block;margin-bottom:.5rem;}
+.contrast-cell.wrong{background:rgba(122,28,28,.07);color:#9a7575;}
+.contrast-cell.wrong .clabel{color:#6b3030;}
+.contrast-cell.right{background:rgba(201,168,76,.05);color:var(--bone);}
+.contrast-cell.right .clabel{color:var(--gold-dim);}
+@media(max-width:560px){.contrast{grid-template-columns:1fr;}}
+
+/* STATS */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ash);margin:2rem 0;}
+.stat-cell{background:var(--ink2);padding:1.5rem;text-align:center;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--gold);line-height:1;margin-bottom:.4rem;}
+.stat-desc{font-family:'Cormorant Garamond',serif;font-size:.88rem;color:var(--bone-dim);line-height:1.5;font-style:italic;}
+@media(max-width:500px){.stat-row{grid-template-columns:1fr;}}
+
+/* ===========================
+   WORKSHEET COMPONENTS
+=========================== */
+
+/* TEXT INPUT */
+.ws-field{margin:1.25rem 0;}
+.ws-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);display:block;margin-bottom:.6rem;}
+.ws-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--smoke);color:var(--white);font-family:'Cormorant Garamond',serif;font-size:1.1rem;padding:.5rem 0;outline:none;transition:border-color .25s;line-height:1.5;}
+.ws-input:focus{border-bottom-color:var(--gold);}
+.ws-input::placeholder{color:var(--smoke);font-style:italic;}
+.ws-textarea{width:100%;background:var(--ink3);border:1px solid var(--ash);color:var(--white);font-family:'Cormorant Garamond',serif;font-size:1.05rem;padding:1rem;outline:none;transition:border-color .25s;line-height:1.7;resize:vertical;min-height:90px;}
+.ws-textarea:focus{border-color:var(--gold-dim);}
+.ws-textarea::placeholder{color:var(--smoke);font-style:italic;}
+
+/* REFLECTION PROMPT */
+.reflect{background:var(--ink3);border-left:2px solid var(--gold-dim);padding:1.5rem;margin:1.5rem 0;}
+.reflect-prompt{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);display:block;margin-bottom:.75rem;}
+.reflect textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--ash);color:var(--white);font-family:'Cormorant Garamond',serif;font-size:1.05rem;padding:.4rem 0;outline:none;resize:none;line-height:1.7;min-height:60px;transition:border-color .25s;}
+.reflect textarea:focus{border-bottom-color:var(--gold);}
+.reflect textarea::placeholder{color:var(--bone-dim);font-style:italic;}
+
+/* CHECKBOX LIST */
+.check-list{list-style:none;margin:1rem 0;}
+.check-list li{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:color .2s;}
+.check-list li:last-child{border-bottom:none;}
+.check-list li:hover{color:var(--white);}
+.check-list li .ctext{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bone);line-height:1.6;transition:color .2s;}
+.check-list li.done .ctext{color:var(--bone-dim);text-decoration:line-through;text-decoration-color:var(--gold-dim);}
+.cbox{width:18px;height:18px;border:1px solid var(--smoke);flex-shrink:0;margin-top:.25rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.cbox.on{border-color:var(--gold);background:var(--gold);}
+.cbox.on::after{content:'✓';font-size:.65rem;color:var(--ink);font-weight:700;}
+
+/* SCALE RATING */
+.scale-row{margin:1.25rem 0;}
+.scale-question{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bone);line-height:1.65;margin-bottom:.75rem;}
+.scale-btns{display:flex;gap:.35rem;flex-wrap:wrap;}
+.scale-btn{width:40px;height:40px;background:var(--ash);border:1px solid var(--smoke);color:var(--bone-dim);font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.scale-btn:hover{border-color:var(--gold-dim);color:var(--white);}
+.scale-btn.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700;}
+.scale-ends{display:flex;justify-content:space-between;margin-top:.4rem;}
+.scale-end-label{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.12em;color:var(--bone-dim);text-transform:uppercase;}
+
+/* PATTERN MATRIX */
+.pattern-grid{display:grid;grid-template-columns:1fr;gap:.75rem;margin:1.5rem 0;}
+.pattern-row{display:flex;align-items:flex-start;gap:1rem;padding:1rem;background:var(--ink3);border:1px solid var(--ash);cursor:pointer;transition:all .2s;}
+.pattern-row:hover{border-color:var(--smoke);}
+.pattern-row.selected{border-color:var(--gold-dim);background:rgba(201,168,76,.04);}
+.pattern-check{width:16px;height:16px;border:1px solid var(--smoke);flex-shrink:0;margin-top:.25rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.pattern-row.selected .pattern-check{background:var(--gold);border-color:var(--gold);}
+.pattern-row.selected .pattern-check::after{content:'✓';font-size:.6rem;color:var(--ink);}
+.pattern-text strong{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dim);display:block;margin-bottom:.3rem;}
+.pattern-text p{font-family:'Cormorant Garamond',serif;font-size:.97rem;color:var(--bone);line-height:1.6;}
+
+/* SECTION HEADER */
+.section-hdr{padding:2rem 0 1.5rem;border-bottom:1px solid var(--ash);margin-bottom:2rem;}
+.section-num{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:var(--ash);line-height:1;margin-bottom:-.5rem;}
+
+/* TAG */
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.16em;padding:.3rem .7rem;text-transform:uppercase;}
+.tag-outline{border:1px solid var(--smoke);color:var(--bone-dim);}
+.tag-gold{border:1px solid var(--gold-dim);color:var(--gold);}
+.tags{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0;}
+
+/* MILESTONE */
+.milestone{display:flex;gap:1.25rem;margin:1.25rem 0;align-items:flex-start;}
+.ms-num{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);width:32px;flex-shrink:0;line-height:1;}
+.ms-body h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:var(--white);margin-bottom:.25rem;}
+.ms-body p{font-family:'Cormorant Garamond',serif;font-size:.97rem;color:var(--bone);line-height:1.65;}
+
+/* COMMITMENT BOX */
+.commit-box{margin:2rem 0;padding:2rem;border:1px solid var(--gold-dim);background:rgba(201,168,76,.03);position:relative;}
+.commit-box::before{content:'YOUR COMMITMENT';position:absolute;top:-.75rem;left:1.5rem;font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.22em;color:var(--gold);background:var(--ink);padding:0 .5rem;}
+
+/* LIE / TRUTH */
+.lt-pair{margin:.6rem 0;}
+.lie-item,.truth-item{padding:.7rem 1rem;margin:.3rem 0;display:flex;align-items:flex-start;gap:.7rem;font-family:'Cormorant Garamond',serif;font-size:.98rem;line-height:1.55;}
+.lie-item{background:rgba(122,28,28,.07);color:#9a7070;}
+.lie-item::before{content:'✕';font-family:'DM Mono',monospace;font-size:.65rem;color:var(--red-light);flex-shrink:0;margin-top:.2rem;}
+.truth-item{background:rgba(201,168,76,.05);color:var(--bone);}
+.truth-item::before{content:'→';font-family:'DM Mono',monospace;font-size:.65rem;color:var(--gold);flex-shrink:0;margin-top:.2rem;}
+
+/* PHASE SELECTOR SCREEN */
+.phase-cards-wrap{display:grid;grid-template-columns:1fr;gap:2px;margin:2.5rem 0;}
+.phase-card{background:var(--ink2);border:1px solid var(--ash);padding:2.25rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.phase-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ash);transition:background .3s;}
+.phase-card:hover,.phase-card.sel{border-color:var(--gold-dim);background:rgba(201,168,76,.03);}
+.phase-card.sel::before,.phase-card:hover::before{background:var(--gold);}
+.phase-num-big{font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:var(--ash);line-height:1;margin-bottom:.25rem;transition:color .3s;}
+.phase-card.sel .phase-num-big,.phase-card:hover .phase-num-big{color:var(--gold-dim);}
+.phase-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.05em;margin-bottom:.6rem;}
+.phase-card-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone-dim);line-height:1.7;font-style:italic;}
+
+/* SLIDER */
+.slider-display{text-align:center;margin:2rem 0;}
+.slider-pct{font-family:'Bebas Neue',sans-serif;font-size:8rem;color:var(--gold);line-height:1;transition:color .3s;}
+.slider-sublabel{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--bone-dim);text-transform:uppercase;margin-top:.4rem;}
+.slider-input{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:var(--ash);outline:none;cursor:pointer;}
+.slider-input::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;background:var(--gold);border:2px solid var(--ink);box-shadow:0 0 0 2px var(--gold-dim);cursor:pointer;transition:all .2s;}
+.slider-input::-webkit-slider-thumb:hover{background:var(--gold-light);}
+.slider-input::-moz-range-thumb{width:26px;height:26px;background:var(--gold);border:2px solid var(--ink);border-radius:0;cursor:pointer;}
+.slider-ticks{display:flex;justify-content:space-between;margin-top:.6rem;}
+.s-tick{font-family:'DM Mono',monospace;font-size:.55rem;color:var(--bone-dim);}
+
+/* DECLARATION */
+.decl-box{padding:2.5rem 2rem;border:1px solid var(--gold-dim);background:var(--ink2);position:relative;margin:2rem 0;}
+.decl-box::before{content:'"';position:absolute;top:-2.5rem;left:1.5rem;font-family:'Cormorant Garamond',serif;font-size:9rem;color:var(--gold);opacity:.15;line-height:1;}
+.decl-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.05rem,2.5vw,1.25rem);line-height:1.85;color:var(--white);font-style:italic;position:relative;z-index:1;}
+.decl-line{display:block;margin:.4rem 0;}
+.decl-line strong{font-style:normal;color:var(--gold);font-weight:600;}
+
+/* CTA SCREEN */
+.cta-primary{width:100%;max-width:540px;margin:0 auto;padding:2.5rem;border:1px solid var(--gold-dim);background:var(--ink2);text-align:center;display:block;}
+
+/* PHASE CONTENT */
+.phase-content{display:none;}
+.phase-content.active{display:block;}
+
+/* OWNERSHIP MSG */
+.ownership-msg{padding:1.75rem;border:1px solid var(--ash);background:var(--ink2);min-height:80px;margin:1.5rem 0;transition:all .35s;}
+.ownership-msg p{font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:var(--bone);line-height:1.78;font-style:italic;}
+
+/* SCORE DISPLAY */
+.score-display{text-align:center;padding:2.5rem;border:1px solid var(--ash);background:var(--ink2);margin:2rem 0;}
+.score-num{font-family:'Bebas Neue',sans-serif;font-size:6rem;color:var(--gold);line-height:1;}
+.score-label{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--bone-dim);text-transform:uppercase;margin-top:.5rem;}
+.score-tier{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);margin-top:.75rem;letter-spacing:.06em;}
+.score-tier-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bone-dim);font-style:italic;margin-top:.5rem;line-height:1.6;}
+
+/* NEXT SECTION */
+.next-section{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--ash);}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .decl-box{padding:1.75rem 1.25rem;}
+  .phase-card{padding:1.5rem;}
+  .card{padding:1.5rem;}
+  .truth-block{padding:1.5rem;}
+}
+
+/* VALUE FIRST ENTRY: the phase choice is the first screen */
+.mix-logo,.nav-logo,.intake-logo,.start-logo{mix-blend-mode:screen;}
+.start-head{text-align:center;padding:.5rem 0 .25rem;}
+.start-logo{width:64px;height:64px;object-fit:contain;display:block;margin:0 auto .9rem;}
+.start-head .h1{margin-top:.5rem;}
+.start-line{max-width:430px;margin:.75rem auto 0;font-size:1.08rem;line-height:1.6;}
+#s-phase .phase-cards-wrap{margin:1.5rem 0 1.25rem;}
+#s-phase .phase-card:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.phase-cue{display:block;margin-top:1rem;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.16em;color:var(--gold);}
+.phase-card:hover .phase-cue,.phase-card:focus-visible .phase-cue{color:var(--gold-light);}
+#s-phase .stat-row{margin:2rem auto 0;}
+#s-phase .alert{margin:1.5rem auto 0;}
+@media(max-width:600px){
+  .pt{padding-top:4.6rem;}
+  .start-logo{width:52px;height:52px;margin-bottom:.6rem;}
+  .start-line{font-size:1rem;}
+  #s-phase .phase-card{padding:1.1rem 1.15rem;}
+  #s-phase .phase-num-big{font-size:2.2rem;}
+  #s-phase .phase-card-title{font-size:1.5rem;margin-bottom:.4rem;}
+  #s-phase .phase-card-desc{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:.95rem;line-height:1.55;}
+  #s-phase .phase-card .tags{margin-bottom:.15rem;}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
+</style>
+</head>
+<body>
+<div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+<div class="top-nav">
+  <a href="https://mrunstuck.com" target="_blank"><img src="data:image/webp;base64,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" class="nav-logo" alt="Mr. Unstuck"></a>
+  <span class="nav-step" id="navStep"></span>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: PHASE SELECTOR
+═══════════════════════════════════════════════ -->
+<div class="screen active" id="s-phase">
+<div class="wrap pt pb">
+  <div class="start-head">
+    <img src="data:image/webp;base64,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" class="start-logo" alt="Mr. Unstuck">
+    <span class="eyebrow">Mr. Unstuck · Divorce Reckoning Tool</span>
+    <h1 class="h1">THE <span class="gold">MIRROR</span></h1>
+    <p class="body start-line">Where are you right now? Tap the one that finds you and see your mirror. No email needed to look.</p>
+  </div>
+
+  <div class="phase-cards-wrap">
+    <div class="phase-card" id="pc1" onclick="chooseFirst(1)" role="button" tabindex="0">
+      <div class="phase-num-big">01</div>
+      <div class="phase-card-title">THE STORM APPROACHING</div>
+      <div class="tags"><span class="tag tag-outline">Disconnection</span><span class="tag tag-outline">Avoidance</span><span class="tag tag-outline">Tension Daily</span><span class="tag tag-outline">Questioning Everything</span></div>
+      <p class="phase-card-desc">The marriage is fracturing. You feel it. Maybe she's checked out. Maybe you both have. The intimacy is gone. The fights are hollow or nonexistent. You're roommates with rings on — and you don't know if you're still fighting for it or quietly preparing for the end.</p>
+      <span class="phase-cue">SEE MY MIRROR →</span>
+    </div>
+    <div class="phase-card" id="pc2" onclick="chooseFirst(2)" role="button" tabindex="0">
+      <div class="phase-num-big">02</div>
+      <div class="phase-card-title">THE FIRE</div>
+      <div class="tags"><span class="tag tag-outline">Papers Filed</span><span class="tag tag-outline">Lawyers Involved</span><span class="tag tag-outline">Custody Battle</span><span class="tag tag-outline">Identity Shattered</span></div>
+      <p class="phase-card-desc">You're in it. The papers are real. The lawyers are real. Maybe you're out of the house. Maybe you're watching your kids part-time and it's hollowing you out. You're navigating the unraveling of a life you built and you don't know who you are without it.</p>
+      <span class="phase-cue">SEE MY MIRROR →</span>
+    </div>
+    <div class="phase-card" id="pc3" onclick="chooseFirst(3)" role="button" tabindex="0">
+      <div class="phase-num-big">03</div>
+      <div class="phase-card-title">THE AFTERMATH</div>
+      <div class="tags"><span class="tag tag-outline">Post-Divorce</span><span class="tag tag-outline">Rebuilding</span><span class="tag tag-outline">Unresolved Anger</span><span class="tag tag-outline">Repeating Patterns</span></div>
+      <p class="phase-card-desc">It's over — legally. But it's not really over. You're carrying the bitterness, the shame, the what-ifs. You've moved on in appearance but the foundation is cracked. You survived. But surviving isn't thriving — and deep down, you already know that.</p>
+      <span class="phase-cue">SEE MY MIRROR →</span>
+    </div>
+  </div>
+
+  <div id="phase-go" style="display:none;">
+    <button class="btn btn-gold btn-full" onclick="enterPhase()">ENTER THE MIRROR →</button>
+  </div>
+
+  <div class="stat-row" style="max-width:520px;">
+    <div class="stat-cell"><div class="stat-num">50%</div><div class="stat-desc">of marriages end in divorce — most men never recover their identity</div></div>
+    <div class="stat-cell"><div class="stat-num">3×</div><div class="stat-desc">Men are 3× less likely to seek support post-divorce. Silence isn't strength.</div></div>
+  </div>
+
+  <div class="tags" style="margin-top:2rem;">
+    <span class="tag tag-gold">Phase I — The Storm Approaching</span>
+    <span class="tag tag-gold">Phase II — The Fire</span>
+    <span class="tag tag-gold">Phase III — The Aftermath</span>
+  </div>
+
+  <div class="alert" style="max-width:520px;margin-top:2rem;">
+    <p>This tool will not agree with your victim story. It won't tell you this was all her fault. If that's what you're after — this isn't your place. But if you're ready to look in the mirror and actually lead yourself out, keep going.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: PHASE CONTENT
+═══════════════════════════════════════════════ -->
+<div class="screen" id="s-content">
+<div class="wrap pt pb">
+  <button class="back-btn" onclick="go('s-phase')">← Change Phase</button>
+
+  <!-- =========== PHASE 1 =========== -->
+  <div class="phase-content" id="p1">
+    <span class="eyebrow" style="margin-top:1.5rem;">Phase I — The Storm Approaching</span>
+    <h1 class="h1">YOU KNOW<br>SOMETHING'S<br><span class="gold">WRONG.</span></h1>
+    <div class="gold-rule"></div>
+    <p class="body">You're reading this because the marriage is in trouble. Maybe it's been in trouble for years. Maybe it fell apart quietly — like a foundation you never thought to check. You're standing on shifting ground, pretending it's fine, or you've already started making peace with the idea that it won't be.</p>
+
+    <div class="pull-quote">
+      <p>Most men wait until the marriage is already a corpse before they try to resuscitate it.</p>
+    </div>
+
+    <p class="body">Here's the hard truth: if you're in Phase 1, you still have time. But time is not your ally when you're spending it in avoidance. Every day you defer the honest conversation is a day you're choosing comfort over courage. And leaders don't hide from their homes.</p>
+
+    <div class="scripture">
+      <p class="verse">"So, because you are lukewarm — neither hot nor cold — I am about to spit you out of my mouth."</p>
+      <p class="ref">— Revelation 3:15–16</p>
+    </div>
+
+    <p class="body" style="margin-bottom:2.5rem;">Lukewarm is a choice. Not showing up — not fully in, not fully out — is a decision. And it's costing you both.</p>
+
+    <!-- TRUTH 1 -->
+    <div class="section-hdr">
+      <div class="section-num">01</div>
+      <h2 class="h2">YOU'VE BEEN <span class="gold">MANAGING IT,</span><br>NOT LEADING IT</h2>
+    </div>
+    <p class="body">There's a difference between keeping the peace and building peace. You've been keeping it — managing the temperature, avoiding the topic, doing just enough to not blow it up. That is not leadership. That is maintenance. And you cannot maintain something back to health.</p>
+    <div class="contrast">
+      <div class="contrast-cell wrong"><span class="clabel">What most men do</span>"I don't want to make it worse. We just need to get through this season and things will get better."</div>
+      <div class="contrast-cell right"><span class="clabel">What a leader does</span>"This is broken. I own part of why it's broken. We stop pretending right now and we start dealing."</div>
+    </div>
+
+    <div class="reflect">
+      <span class="reflect-prompt">Reflection — Write your answer</span>
+      <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">When did you last initiate an honest, vulnerable conversation about the state of your marriage — not to fix blame, but to actually see what's there?</p>
+      <textarea placeholder="Write here... be honest, no one else is reading this."></textarea>
+    </div>
+
+    <!-- TRUTH 2 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">02</div>
+      <h2 class="h2">HER DISCONNECTION<br>IS <span class="gold">DATA,</span> NOT DRAMA</h2>
+    </div>
+    <p class="body">When she stopped reaching for you. When the conversations got shorter. When the bedroom went quiet. When she stopped telling you things. That was data — and you either ignored it, minimized it, or blamed her for it. Leaders read the room. When did you stop reading yours?</p>
+
+    <div class="truth-block" data-label="Pattern Check">
+      <h4>The 5 Signs You Stopped Leading Your Home</h4>
+      <p style="margin-bottom:1rem;">Check every pattern that is or was true. No judgment. Just honesty.</p>
+      <ul class="check-list" id="ph1-patterns">
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I stopped initiating dates, experiences, or meaningful time together.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I prioritized work, business, or other responsibilities over the marriage consistently.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I knew something was wrong and said nothing for weeks or months at a time.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I made her feel alone emotionally while being physically present.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I responded to her concerns with defensiveness instead of curiosity.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I expected her to be okay with less than I would have accepted myself.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I confused providing financially with being present as a husband.</span></li>
+      </ul>
+    </div>
+
+    <div class="reflect">
+      <span class="reflect-prompt">Honest Inventory</span>
+      <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">Of the patterns you checked — which one do you think did the most damage? Why?</p>
+      <textarea placeholder="Don't rush this. Sit with it."></textarea>
+    </div>
+
+    <!-- TRUTH 3 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">03</div>
+      <h2 class="h2">THE MAN SHE<br>MARRIED <span class="gold">LEFT</span><br>THE BUILDING</h2>
+    </div>
+    <p class="body">This one stings. But somewhere along the way — stress, career, kids, comfort, complacency — you checked out first. Not intentionally. But slowly, invisibly, you stopped leading your home. She didn't marry a man who would manage her like a project. She married a man who pursued her. When did that man leave?</p>
+
+    <div class="ws-field" style="margin-top:1.5rem;">
+      <label class="ws-label">Who were you when you first got together? (3 words or a sentence)</label>
+      <input class="ws-input" type="text" placeholder="Describe the man she fell for...">
+    </div>
+    <div class="ws-field">
+      <label class="ws-label">What changed? When did you stop being that man in the marriage?</label>
+      <textarea class="ws-textarea" placeholder="Be specific. A season, a decision, a slow drift..."></textarea>
+    </div>
+    <div class="ws-field">
+      <label class="ws-label">What would it take to bring that man back — better, not just restored?</label>
+      <textarea class="ws-textarea" placeholder="What does the next version of you look like?"></textarea>
+    </div>
+
+    <!-- TRUTH 4 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">04</div>
+      <h2 class="h2">STAYING FOR<br>THE KIDS IS<br><span class="gold">NOT ENOUGH</span></h2>
+    </div>
+    <p class="body">You've told yourself you're staying for the children. Noble on the surface. But children don't need two people under one roof — they need two people who are whole. A hollow marriage modeled in front of children teaches them exactly what love looks like. Is that the curriculum you're teaching?</p>
+
+    <div class="contrast">
+      <div class="contrast-cell wrong"><span class="clabel">What kids learn from hollow marriages</span>Love means tolerating resentment. Men shut down when things get hard. Staying is the same as being present.</div>
+      <div class="contrast-cell right"><span class="clabel">What kids need to see instead</span>A man who faces hard things with honesty. A father who models emotional leadership. What courage actually looks like in real life.</div>
+    </div>
+
+    <!-- TRUTH 5 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">05</div>
+      <h2 class="h2">THE DECISION<br>IN FRONT OF<br><span class="gold">YOU</span></h2>
+    </div>
+    <p class="body">Phase 1 is not the end. It can be the beginning — of the hardest and most important season of leadership you will ever walk. But you have to stop pretending. You have to stop managing. You have to decide: are you all in on fixing this with the same level of honesty that built the problem, or are you going to walk through what comes next as a man who learned something? Both paths require you to be honest about where you are. Neither path tolerates avoidance.</p>
+
+    <div class="commit-box">
+      <p class="body-sm" style="margin-bottom:1.25rem;font-style:italic;">Whatever you decide — write it. A decision not written is just a thought. A thought unchallenged stays comfortable.</p>
+      <div class="ws-field">
+        <label class="ws-label">My honest decision and intention right now is:</label>
+        <textarea class="ws-textarea" placeholder="Write it plainly. Don't dress it up."></textarea>
+      </div>
+      <div class="ws-field">
+        <label class="ws-label">One thing I will do differently in the next 7 days:</label>
+        <input class="ws-input" type="text" placeholder="Specific and small enough to actually do it...">
+      </div>
+    </div>
+
+    <div class="stoic" style="margin-top:2.5rem;">
+      <p class="q">"It is not death that a man should fear, but he should fear never beginning to live."</p>
+      <p class="attr">— Marcus Aurelius</p>
+    </div>
+
+    <div class="next-section">
+      <button class="btn btn-gold btn-full" onclick="toOwnership()">NEXT: OWN YOUR PERCENTAGE →</button>
+    </div>
+  </div>
+
+  <!-- =========== PHASE 2 =========== -->
+  <div class="phase-content" id="p2">
+    <span class="eyebrow" style="margin-top:1.5rem;">Phase II — The Fire</span>
+    <h1 class="h1">YOU'RE IN IT.<br><span class="gold">AND IT'S<br>BURNING.</span></h1>
+    <div class="gold-rule"></div>
+    <p class="body">You're in the middle of it. The papers are real. The lawyers are real. The pain is real. Maybe you're sleeping somewhere you never expected. Maybe you're watching your kids part-time now and it's hollowing you out from the inside. This is the phase most men either destroy themselves in — or get rebuilt in. There is no middle ground here.</p>
+
+    <div class="pull-quote">
+      <p>The man who survives the fire without letting it refine him just becomes ash in a suit.</p>
+    </div>
+
+    <div class="scripture">
+      <p class="verse">"Unless a grain of wheat falls into the earth and dies, it remains alone; but if it dies, it bears much fruit."</p>
+      <p class="ref">— John 12:24</p>
+    </div>
+
+    <p class="body" style="margin-bottom:2.5rem;">Death before resurrection. That's the template. Not just theologically — practically. The old version of you — the patterns you carried, the identity built around being a husband — that version has to die. Not you. That version. And that death is violent. And it should be.</p>
+
+    <!-- TRUTH 1 -->
+    <div class="section-hdr">
+      <div class="section-num">01</div>
+      <h2 class="h2">ANGER IS ENERGY.<br><span class="gold">WHERE IS<br>IT GOING?</span></h2>
+    </div>
+    <p class="body">You have every right to be angry. Anger is not the problem. Anger weaponized against your kids, your lawyer strategy, every conversation you have — that's the problem. Anger channeled? That's fire under a man's feet. The question isn't whether you're angry. It's what you're doing with it.</p>
+
+    <div class="contrast">
+      <div class="contrast-cell wrong"><span class="clabel">Anger destroying you</span>Badmouthing her to the kids. Spending money to punish her in court. Going dark on everyone who cares about you. Drinking more. Working out less. Letting the wound run the show.</div>
+      <div class="contrast-cell right"><span class="clabel">Anger building you</span>Using the energy to become unrecognizable. Getting in the gym at 5am. Rebuilding your finances. Showing your kids what a man looks like under maximum pressure.</div>
+    </div>
+
+    <div class="truth-block" data-label="Anger Audit">
+      <h4>Where Is Your Anger Going Right Now?</h4>
+      <p style="margin-bottom:1rem;">Be honest. Check everything that's true. This is your inventory, not your indictment.</p>
+      <ul class="check-list">
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I've said things about her in front of or near the kids that I shouldn't have.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I've made legal or financial decisions driven by revenge rather than my future.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I'm isolating — pulling away from friends, family, community.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I'm numbing — with alcohol, screens, overwork, or something else.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">My physical health is declining because I've stopped caring for my body.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I'm telling myself the story of what she did on repeat — daily.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I've lost track of what I actually want my life to look like post-divorce.</span></li>
+      </ul>
+    </div>
+
+    <div class="reflect">
+      <span class="reflect-prompt">Channel It — Write your answer</span>
+      <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">If you redirected 50% of the energy you're spending on the anger and the story — into building something — what would you build?</p>
+      <textarea placeholder="Be specific. Don't be vague with your own potential."></textarea>
+    </div>
+
+    <!-- TRUTH 2 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">02</div>
+      <h2 class="h2">YOUR KIDS ARE<br><span class="gold">WATCHING</span><br>EVERYTHING</h2>
+    </div>
+    <p class="body">They are watching how you handle this. Every word you say about their mother. Every time you fall apart without processing it. Every time you show up stable, present, and committed — regardless of the war — that is leadership. That is legacy. Your kids will carry what they see for the rest of their lives. Make sure it's worth carrying.</p>
+
+    <div class="stat-row">
+      <div class="stat-cell"><div class="stat-num">63%</div><div class="stat-desc">of children of divorce cite their father's emotional stability as the #1 factor in their adjustment</div></div>
+      <div class="stat-cell"><div class="stat-num">2×</div><div class="stat-desc">Children with present, regulated fathers are 2× more likely to thrive post-divorce</div></div>
+    </div>
+
+    <div class="ws-field" style="margin-top:1.5rem;">
+      <label class="ws-label">Write your children's names and one word for how you want them to describe this season of your fatherhood:</label>
+      <textarea class="ws-textarea" placeholder="e.g. — Ethan: Steady. Maya: Present. Caleb: Strong."></textarea>
+    </div>
+    <div class="ws-field">
+      <label class="ws-label">What is one thing you've said or done in front of your kids that you need to own and stop?</label>
+      <textarea class="ws-textarea" placeholder="No condemnation. Just honesty and a decision to change it."></textarea>
+    </div>
+
+    <!-- TRUTH 3 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">03</div>
+      <h2 class="h2">THE NARRATIVE<br>RUNNING IN<br><span class="gold">YOUR HEAD</span></h2>
+    </div>
+    <p class="body">There is a story on loop. It probably sounds like: "She destroyed our family." "I gave everything and got nothing." "I didn't deserve this." Maybe some of that is true. But when that narrative becomes your identity — when being wronged becomes your fuel instead of your testimony — you are stuck. The wronged man is frozen. The refined man moves.</p>
+
+    <div class="truth-block" data-label="Narrative Check">
+      <h4>Identify Your Loop</h4>
+      <p style="margin-bottom:1rem;">Which of these narratives is running rent-free in your head? Select all that apply.</p>
+      <div class="pattern-grid">
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>The Victim Loop</strong><p>"This happened to me. She ruined this. I had no part in this outcome."</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>The Martyr Loop</strong><p>"I sacrificed everything. I gave until it hurt. And none of it was good enough."</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>The Rage Loop</strong><p>"She will pay for what she's done. I'll make sure of it, in court or otherwise."</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>The Shame Loop</strong><p>"I'm a failure. My kids are going to be messed up. I couldn't keep my family together."</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>The Comparison Loop</strong><p>"Other men have good marriages. Other men's wives didn't do this. What's wrong with me?"</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>The Regret Loop</strong><p>"If I had just done X differently. If I had listened more. If I had seen it sooner."</p></div></div>
+      </div>
+    </div>
+
+    <div class="reflect">
+      <span class="reflect-prompt">Counter the Narrative</span>
+      <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">Write the opposing truth to the loop(s) you selected. Not a platitude — an honest counter-statement you can actually believe.</p>
+      <textarea placeholder='e.g. — The Victim Loop counter: "I contributed to the conditions that led here. That means I have the power to contribute to where I go next."'></textarea>
+    </div>
+
+    <!-- TRUTH 4 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">04</div>
+      <h2 class="h2">ISOLATION IS NOT<br>STOICISM.<br><span class="gold">IT'S SLOW DEATH.</span></h2>
+    </div>
+    <p class="body">You've pulled away from everyone. You don't want to talk about it. You're "handling it." But handling it alone is how men spiral. You were not built to carry this in isolation. The strongest men in history — military, business, faith — all had inner circles. Strength in community isn't weakness. It's intelligence.</p>
+
+    <div class="truth-block" data-label="Isolation Inventory">
+      <h4>Who Is In Your Corner Right Now?</h4>
+      <p style="margin-bottom:1rem;">Write it out. Real names. If you can't fill these in, that is the problem.</p>
+      <div class="ws-field"><label class="ws-label">The man I can call at 2am when I'm losing it:</label><input class="ws-input" type="text" placeholder="Name..."></div>
+      <div class="ws-field"><label class="ws-label">The man who will tell me the truth even when I don't want to hear it:</label><input class="ws-input" type="text" placeholder="Name..."></div>
+      <div class="ws-field"><label class="ws-label">The community or group I am currently part of that is sharpening me:</label><input class="ws-input" type="text" placeholder="Name or 'None' — be honest..."></div>
+      <div class="alert" style="margin-top:1rem;"><p>If you wrote "None" on that last one — that's not a personality trait. That's a strategy gap. And it's costing you.</p></div>
+    </div>
+
+    <!-- TRUTH 5 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">05</div>
+      <h2 class="h2">THE FIRE EITHER<br><span class="gold">REFINES</span> OR<br>DESTROYS YOU</h2>
+    </div>
+    <p class="body">There is no neutral outcome in Phase 2. You either get rebuilt here or you come out the other side more broken than when you went in — and you drag that brokenness into everything that comes next. Your kids. Your next relationship. Your business. Your faith. The fire is not optional. What it produces is.</p>
+
+    <div class="commit-box">
+      <div class="ws-field"><label class="ws-label">What kind of man do I intend to be on the other side of this?</label><textarea class="ws-textarea" placeholder="Write a vision, not just an emotion. What does he look like, lead like, live like?"></textarea></div>
+      <div class="ws-field"><label class="ws-label">What is one decision I keep avoiding that I know I need to make?</label><textarea class="ws-textarea" placeholder="The thing you already know. Write it."></textarea></div>
+      <div class="ws-field"><label class="ws-label">I will reach out to ____________ this week for honest accountability about how I'm actually doing.</label><input class="ws-input" type="text" placeholder="Name..."></div>
+    </div>
+
+    <div class="stoic" style="margin-top:2.5rem;">
+      <p class="q">"Difficulties strengthen the mind, as labor does the body."</p>
+      <p class="attr">— Seneca</p>
+    </div>
+
+    <div class="next-section">
+      <button class="btn btn-gold btn-full" onclick="toOwnership()">NEXT: OWN YOUR PERCENTAGE →</button>
+    </div>
+  </div>
+
+  <!-- =========== PHASE 3 =========== -->
+  <div class="phase-content" id="p3">
+    <span class="eyebrow" style="margin-top:1.5rem;">Phase III — The Aftermath</span>
+    <h1 class="h1">IT'S OVER.<br><span class="gold">OR IS IT?</span></h1>
+    <div class="gold-rule"></div>
+    <p class="body">The papers are signed. The lawyers are done. You've moved. You've adjusted. On paper, it's finished. But you and I both know — it's not really finished. Not inside. You're either still carrying it like a backpack you refuse to set down, or you've buried it so deep it's steering you without your knowledge.</p>
+
+    <div class="pull-quote">
+      <p>Some men leave the marriage. The marriage never leaves them.</p>
+    </div>
+
+    <p class="body">Phase 3 is the most dangerous phase because it looks like survival. You're functional. You've got a new place. Maybe a new relationship. You're moving. But are you actually different? Or are you the same man in a new situation, running the same patterns, about to teach your children the same lessons?</p>
+
+    <div class="scripture">
+      <p class="verse">"I have been crucified with Christ; and it is no longer I who live, but Christ lives in me."</p>
+      <p class="ref">— Galatians 2:20</p>
+    </div>
+
+    <!-- TRUTH 1 -->
+    <div class="section-hdr">
+      <div class="section-num">01</div>
+      <h2 class="h2">SURVIVING IS NOT<br><span class="gold">TRANSFORMATION</span></h2>
+    </div>
+    <p class="body">There's a difference between a man who went through a divorce and a man who was transformed by one. Survivors collect scars and wear them as identity. Transformed men look at those same scars and understand the surgery they survived. One man is frozen at the wound. The other is built by it.</p>
+
+    <div class="contrast">
+      <div class="contrast-cell wrong"><span class="clabel">The Survivor Pattern</span>"I'll never trust like that again." "Marriage is a trap." "Women are ___." Moving into new situations with the same unprocessed wounds running the show invisibly.</div>
+      <div class="contrast-cell right"><span class="clabel">The Transformed Man</span>"I know what I contributed. I know what I'm changing. I know who I am and what I'm building." Moving forward with honest self-knowledge and intentional new patterns.</div>
+    </div>
+
+    <div class="truth-block" data-label="Transformation Audit">
+      <h4>Have You Actually Done the Work?</h4>
+      <p style="margin-bottom:1rem;">Rate yourself honestly 1–5 on each. 1 = not at all, 5 = genuinely done this work.</p>
+
+      <div class="scale-row">
+        <p class="scale-question">I have identified the specific patterns I brought into the marriage that contributed to its breakdown.</p>
+        <div class="scale-btns" data-group="tr1">
+          <button class="scale-btn" onclick="rate(this,'tr1',1)">1</button><button class="scale-btn" onclick="rate(this,'tr1',2)">2</button><button class="scale-btn" onclick="rate(this,'tr1',3)">3</button><button class="scale-btn" onclick="rate(this,'tr1',4)">4</button><button class="scale-btn" onclick="rate(this,'tr1',5)">5</button>
+        </div>
+        <div class="scale-ends"><span class="scale-end-label">Not at all</span><span class="scale-end-label">Fully done</span></div>
+      </div>
+
+      <div class="scale-row">
+        <p class="scale-question">I have processed the grief of this loss — not just the anger, but the actual grief of what's gone.</p>
+        <div class="scale-btns" data-group="tr2">
+          <button class="scale-btn" onclick="rate(this,'tr2',1)">1</button><button class="scale-btn" onclick="rate(this,'tr2',2)">2</button><button class="scale-btn" onclick="rate(this,'tr2',3)">3</button><button class="scale-btn" onclick="rate(this,'tr2',4)">4</button><button class="scale-btn" onclick="rate(this,'tr2',5)">5</button>
+        </div>
+        <div class="scale-ends"><span class="scale-end-label">Not at all</span><span class="scale-end-label">Fully done</span></div>
+      </div>
+
+      <div class="scale-row">
+        <p class="scale-question">I have forgiven her — not for her benefit, but because I understand bitterness is a cost I pay, not her.</p>
+        <div class="scale-btns" data-group="tr3">
+          <button class="scale-btn" onclick="rate(this,'tr3',1)">1</button><button class="scale-btn" onclick="rate(this,'tr3',2)">2</button><button class="scale-btn" onclick="rate(this,'tr3',3)">3</button><button class="scale-btn" onclick="rate(this,'tr3',4)">4</button><button class="scale-btn" onclick="rate(this,'tr3',5)">5</button>
+        </div>
+        <div class="scale-ends"><span class="scale-end-label">Not at all</span><span class="scale-end-label">Fully done</span></div>
+      </div>
+
+      <div class="scale-row">
+        <p class="scale-question">I have a clear identity that is not defined by my marital status, my ex-wife's opinion of me, or the divorce itself.</p>
+        <div class="scale-btns" data-group="tr4">
+          <button class="scale-btn" onclick="rate(this,'tr4',1)">1</button><button class="scale-btn" onclick="rate(this,'tr4',2)">2</button><button class="scale-btn" onclick="rate(this,'tr4',3)">3</button><button class="scale-btn" onclick="rate(this,'tr4',4)">4</button><button class="scale-btn" onclick="rate(this,'tr4',5)">5</button>
+        </div>
+        <div class="scale-ends"><span class="scale-end-label">Not at all</span><span class="scale-end-label">Fully done</span></div>
+      </div>
+
+      <div class="scale-row">
+        <p class="scale-question">I am in honest, accountable community with other men who are sharpening me — not just validating me.</p>
+        <div class="scale-btns" data-group="tr5">
+          <button class="scale-btn" onclick="rate(this,'tr5',1)">1</button><button class="scale-btn" onclick="rate(this,'tr5',2)">2</button><button class="scale-btn" onclick="rate(this,'tr5',3)">3</button><button class="scale-btn" onclick="rate(this,'tr5',4)">4</button><button class="scale-btn" onclick="rate(this,'tr5',5)">5</button>
+        </div>
+        <div class="scale-ends"><span class="scale-end-label">Not at all</span><span class="scale-end-label">Fully done</span></div>
+      </div>
+
+      <div style="margin-top:1.5rem;" id="tr-score-display" style="display:none;"></div>
+    </div>
+
+    <!-- TRUTH 2 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">02</div>
+      <h2 class="h2">THE BITTERNESS<br>IS EATING YOU<br><span class="gold">ALIVE</span></h2>
+    </div>
+    <p class="body">You may not call it bitterness. You call it "keeping it real" or "just being honest about what she did." But bitterness is bitterness. It doesn't hurt her — she's moved on. It's poisoning your sleep, your next relationship, your parenting, your work, your faith. Bitterness is the price you keep paying on a debt she doesn't even owe anymore.</p>
+
+    <div class="truth-block" data-label="Bitterness Check">
+      <h4>Is Bitterness Running Your Life?</h4>
+      <p style="margin-bottom:1rem;">Check anything that is true. No one is watching.</p>
+      <ul class="check-list">
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I still think about what she did — unprompted — at least a few times a week.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I find ways to mention the divorce or her behavior in conversations where it isn't necessary.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I have genuine difficulty being happy for her if she seems to be doing well.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">My distrust of women has hardened into a general belief, not just a wound from this experience.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I am currently in or pursuing a relationship and I know I haven't actually dealt with the last one.</span></li>
+        <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">My kids have seen or felt my bitterness toward their mother — even when I tried to hide it.</span></li>
+      </ul>
+    </div>
+
+    <div class="reflect">
+      <span class="reflect-prompt">The Cost of Bitterness</span>
+      <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">What has holding onto this cost you specifically? Name real things — sleep, relationships, opportunities, your peace, your faith.</p>
+      <textarea placeholder="Be specific. Vague answers let you stay comfortable."></textarea>
+    </div>
+
+    <!-- TRUTH 3 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">03</div>
+      <h2 class="h2">THE PATTERN<br>WILL REPEAT IF<br><span class="gold">YOU DON'T<br>INTERRUPT IT</span></h2>
+    </div>
+    <p class="body">This is the hardest truth of Phase 3. If you haven't done the work — if you haven't looked honestly at your patterns, your blind spots, what you led and what you abandoned — you are statistically about to repeat this. The divorce rate for second marriages is higher than first marriages. That's not a warning. That's a mirror. The next relationship doesn't fix what the last one revealed.</p>
+
+    <div class="stat-row">
+      <div class="stat-cell"><div class="stat-num">67%</div><div class="stat-desc">Second marriages end in divorce — higher than first marriages because the patterns were never addressed</div></div>
+      <div class="stat-cell"><div class="stat-num">73%</div><div class="stat-desc">Third marriages end in divorce — the pattern compounds without intervention</div></div>
+    </div>
+
+    <div class="truth-block" data-label="Pattern Interrupt">
+      <h4>Name Your Pattern Before It Names You</h4>
+      <p style="margin-bottom:1rem;">What was the core pattern that showed up in your marriage — the thing that, if you're honest, you've seen in other areas of your life too?</p>
+      <div class="pattern-grid">
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>Avoidance</strong><p>I go quiet when things get hard. I manage conflict by disappearing from it emotionally or physically.</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>Control</strong><p>I lead through control — decisions, finances, narrative. When I lose control, I escalate or withdraw.</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>Emotional Absence</strong><p>I'm present in body and provision but not in emotional depth. I don't know how to be fully seen.</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>Overworking</strong><p>I used work, business, or achievement as the reason I couldn't show up fully at home.</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>Reactivity</strong><p>My emotional responses are disproportionate. I escalate quickly and damage things I then have to repair.</p></div></div>
+        <div class="pattern-row" onclick="togglePat(this)"><div class="pattern-check"></div><div class="pattern-text"><strong>People-Pleasing</strong><p>I say yes when I mean no. I suppress what I actually need to keep the peace — until I can't anymore.</p></div></div>
+      </div>
+      <div class="ws-field" style="margin-top:1.25rem;"><label class="ws-label">Where else in your life does this pattern show up? (Work, friendships, parenting, other relationships)</label><textarea class="ws-textarea" placeholder="The pattern in my marriage also shows up in..."></textarea></div>
+      <div class="ws-field"><label class="ws-label">What would interrupting this pattern require of you — specifically and practically?</label><textarea class="ws-textarea" placeholder="Not 'I'll be better.' Be specific about what different actually looks like."></textarea></div>
+    </div>
+
+    <!-- TRUTH 4 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">04</div>
+      <h2 class="h2">YOUR KIDS NEED<br>YOU <span class="gold">WHOLE,</span><br>NOT JUST PRESENT</h2>
+    </div>
+    <p class="body">You show up for the scheduled time. You do the activities. You're present in body. But are you emotionally present? Or are you somewhere else — running the scorecard, replaying the fights, carrying the weight of a war that's technically over? Your kids don't need your time as much as they need your wholeness.</p>
+
+    <div class="ws-field">
+      <label class="ws-label">On a scale of 1–10, how emotionally present are you when you're with your kids? (Write the number and be honest about why)</label>
+      <textarea class="ws-textarea" placeholder="My honest number is ___ because..."></textarea>
+    </div>
+    <div class="ws-field">
+      <label class="ws-label">What is one thing I will change about how I show up with my kids in the next 30 days?</label>
+      <textarea class="ws-textarea" placeholder="Specific. Actionable. Committed."></textarea>
+    </div>
+
+    <!-- TRUTH 5 -->
+    <div class="section-hdr" style="margin-top:3rem;">
+      <div class="section-num">05</div>
+      <h2 class="h2">THE NEXT CHAPTER<br>IS STILL<br><span class="gold">UNWRITTEN</span></h2>
+    </div>
+    <p class="body">Phase 3 is not the end of your story. It can be the beginning of the most important chapter you've ever lived. But only if you stop being the man the divorce happened to — and become the man the divorce was designed to produce. The wound doesn't get the final word. You do. Starting now.</p>
+
+    <div class="commit-box">
+      <div class="ws-field"><label class="ws-label">The version of me I am committed to building from this point forward looks like:</label><textarea class="ws-textarea" placeholder="Describe him. Who is he? How does he lead? What does he carry?"></textarea></div>
+      <div class="ws-field"><label class="ws-label">The one unfinished piece of work from this marriage I am committing to address now is:</label><textarea class="ws-textarea" placeholder="The thing you've been avoiding. Write it."></textarea></div>
+      <div class="ws-field"><label class="ws-label">The man I'm going to be accountable to about this is:</label><input class="ws-input" type="text" placeholder="Name — or 'I will find one' if you don't have one..."></div>
+    </div>
+
+    <div class="alert">
+      <p>Phase 3 is not the end of the story. It can be the beginning of the most important chapter you've ever lived. But only if you're willing to stop being the man divorce happened to — and become the man divorce refined.</p>
+    </div>
+
+    <div class="stoic">
+      <p class="q">"Waste no more time arguing about what a good man should be. Be one."</p>
+      <p class="attr">— Marcus Aurelius</p>
+    </div>
+
+    <div class="next-section">
+      <button class="btn btn-gold btn-full" onclick="toOwnership()">NEXT: OWN YOUR PERCENTAGE →</button>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /s-content -->
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: GATE (Name + Email), after the mirror and before he writes
+═══════════════════════════════════════════════ -->
+<div class="screen" id="s-gate">
+<div class="wrap pt pb">
+  <div class="intake-wrap">
+    <button class="back-btn" onclick="go('s-content')">← Back to my mirror</button>
+    <span class="eyebrow" style="margin-top:1.5rem;">Next · Your Percentage</span>
+    <h1 class="h1">PUT YOUR NAME<br><span class="gold">ON IT</span></h1>
+    <div style="margin:1rem 0 0;"><span class="tag tag-gold" id="gate-phase"></span></div>
+    <p class="body" style="margin-top:1rem;">From here you write, and what you write is yours. Tell us who it belongs to and we email you your full results when you finish.</p>
+
+    <div class="intake-card">
+      <span class="eyebrow" style="margin-bottom:1.25rem;">Your Information</span>
+
+      <div class="ws-field">
+        <label class="ws-label" for="intake-name">First Name *</label>
+        <input class="ws-input" type="text" id="intake-name" placeholder="Your first name..." autocomplete="given-name" enterkeyhint="next">
+        <span class="intake-error" id="err-name">Please enter your name.</span>
+      </div>
+
+      <div class="ws-field" style="margin-top:1.25rem;">
+        <label class="ws-label" for="intake-email">Email Address *</label>
+        <input class="ws-input" type="email" id="intake-email" placeholder="Your email..." autocomplete="email" inputmode="email" enterkeyhint="go">
+        <span class="intake-error" id="err-email">Please enter a valid email address.</span>
+      </div>
+
+      <div style="margin-top:2rem;">
+        <button class="btn btn-gold btn-full" onclick="submitIntake()">OWN MY PERCENTAGE →</button>
+      </div>
+
+      <p class="intake-privacy">🔒 &nbsp;Your information is private. We don't sell data or spam inboxes.<br>Your completed results will be emailed to you at the end.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: OWNERSHIP
+═══════════════════════════════════════════════ -->
+<div class="screen" id="s-ownership">
+<div class="wrap pt pb">
+  <button class="back-btn" onclick="go('s-content')">← Back</button>
+  <span class="eyebrow" style="margin-top:1.5rem;">The Reckoning</span>
+  <h1 class="h1">WHAT PERCENTAGE<br><span class="gold">WAS YOU?</span></h1>
+  <div class="gold-rule"></div>
+  <p class="body" style="margin-bottom:1rem;">We're not doing 100%. This isn't a guilt trip. Divorce is almost never one person's fault entirely — and we're not pretending it is. But somewhere in the wreckage, there's a percentage with your name on it. A slice that belongs to the choices you made, the things you didn't do, the man you stopped being.</p>
+  <p class="body" style="margin-bottom:2rem;">Drag the slider. Don't overthink. Don't minimize for comfort. Don't inflate it for sympathy. Just be honest. What's your number?</p>
+
+  <div class="slider-display">
+    <div class="slider-pct" id="sliderPct">30%</div>
+    <div class="slider-sublabel">of this situation belongs to you</div>
+  </div>
+  <input type="range" class="slider-input" id="ownSlider" min="5" max="95" step="5" value="30" oninput="slide(this.value)">
+  <div class="slider-ticks">
+    <span class="s-tick">5%</span><span class="s-tick">25%</span><span class="s-tick">50%</span><span class="s-tick">75%</span><span class="s-tick">95%</span>
+  </div>
+
+  <div class="ownership-msg" id="ownMsg"><p id="ownMsgTxt">Move the slider to reveal your response.</p></div>
+
+  <div class="hr"></div>
+
+  <div class="card card-gold" style="margin:2rem 0;">
+    <span class="eyebrow">The Unstuck Principle</span>
+    <p class="bebas" style="font-size:clamp(1.4rem,4vw,2rem);color:var(--white);line-height:1.15;margin:1rem 0;">You don't have to own 100% of the problem.<br><span class="gold">You own 100% of your percentage.</span></p>
+    <p class="body" style="font-size:1rem;">Whatever number you chose — that's yours. Not hers. Not the circumstances. Yours. And 100% of that number is your responsibility to address, process, own, and change. That's where we start. Not at fault — at ownership.</p>
+  </div>
+
+  <div class="reflect">
+    <span class="reflect-prompt">Own It — Write It Out</span>
+    <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">Based on your percentage — what specifically did you contribute to this outcome? List it. Name it. Don't generalize.</p>
+    <textarea placeholder="I contributed this situation by... (list 3–5 specific things, not excuses)"></textarea>
+  </div>
+
+  <div class="reflect" style="margin-top:1rem;">
+    <span class="reflect-prompt">The Ownership Commitment</span>
+    <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">Finish this sentence: "I own my ___% and I am committing to address it by..."</p>
+    <textarea placeholder="Write your commitment. Sign it with intention."></textarea>
+  </div>
+
+  <div class="stoic" style="margin-top:2rem;">
+    <p class="q">"If it is not right, do not do it. If it is not true, do not say it. Above all, be the man who sees clearly."</p>
+    <p class="attr">— Marcus Aurelius</p>
+  </div>
+
+  <div class="next-section">
+    <button class="btn btn-gold btn-full" onclick="go('s-unlocks')">NEXT: UNLEARN. UNLOCK. UNLEASH. →</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: THREE UNLOCKS
+═══════════════════════════════════════════════ -->
+<div class="screen" id="s-unlocks">
+<div class="wrap pt pb">
+  <button class="back-btn" onclick="go('s-ownership')">← Back</button>
+  <span class="eyebrow" style="margin-top:1.5rem;">The Framework</span>
+  <h1 class="h1">UNLEARN.<br>UNLOCK.<br><span class="gold">UNLEASH.</span></h1>
+  <div class="gold-rule"></div>
+  <p class="body" style="margin-bottom:2.5rem;">Three movements. Not linear — you may cycle through all three at once. But every man who gets unstuck after divorce walks through all three eventually. The question is whether you do it on purpose, or whether life drags you through sideways.</p>
+
+  <!-- UNLEARN -->
+  <div class="section-hdr">
+    <div class="section-num">01</div>
+    <h2 class="h2"><span class="gold">UNLEARN</span><br>THE LIES</h2>
+  </div>
+  <p class="body">Before you can build anything new, you have to tear down what's false. These aren't lies someone told you with evil intent. Most were downloaded from culture, upbringing, unexamined experience, and trauma. But they are lies — and they drove real decisions in your marriage. Name them. Kill them. Replace them.</p>
+
+  <div class="truth-block" data-label="The Lies">
+    <h4>Which of These Has Been Running You?</h4>
+    <p style="margin-bottom:.75rem;">Check every lie you've believed — consciously or not.</p>
+    <ul class="check-list">
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"Real men figure it out on their own. Asking for help is weakness."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"If I provide financially, I'm doing my job as a husband and father."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"Showing vulnerability gives others power over me."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"If she really loved me enough, she would have stayed."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"I can't fundamentally change who I am — this is just how I'm wired."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"The divorce defines me. I'm a failed husband, father, man."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"Time heals everything. I just need to give it enough time."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"If I work hard enough and achieve enough, I'll feel okay again."</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">"Men don't grieve. I just need to move on and keep going."</span></li>
+    </ul>
+  </div>
+
+  <div class="reflect">
+    <span class="reflect-prompt">Kill the Lie</span>
+    <p class="body-sm" style="margin-bottom:.75rem;font-style:italic;">Pick the 1–2 lies that have done the most damage in your life. Write the truth that replaces it — not a cliché, but an honest counter-statement you can actually believe and act on.</p>
+    <textarea style="min-height:120px;" placeholder="Lie: ___&#10;Truth that replaces it: ___&#10;&#10;Lie: ___&#10;Truth that replaces it: ___"></textarea>
+  </div>
+
+  <!-- UNLOCK -->
+  <div class="section-hdr" style="margin-top:3rem;">
+    <div class="section-num">02</div>
+    <h2 class="h2"><span class="gold">UNLOCK</span><br>THE TRUTHS</h2>
+  </div>
+  <p class="body">Here's what didn't change when the marriage ended: your identity. Your assignment. Your capacity for leadership. The truth of who you were created to be was never contingent on her staying. The divorce revealed something about you — it didn't define something about you. There is a difference.</p>
+
+  <div class="truth-block" data-label="The Truths">
+    <h4>Claim What Is Already True</h4>
+    <p style="margin-bottom:.75rem;">Read each one. Click to claim the ones you're ready to own.</p>
+    <ul class="check-list">
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I was built for leadership. The divorce exposed the gap between my potential and my practice — and the gap can close.</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">My worth is not measured by my marital status or my ex-wife's assessment of me.</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">Growth requires a wound. This one qualifies. The question is what I grow into.</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">My children need a father who is becoming — not just surviving. I can still be that man.</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">Brotherhood is not a luxury — it is a weapon. I don't have to walk this alone.</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">The same God who allowed the death also authors the resurrection.</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">I am not the worst version of myself that showed up in that marriage. I am the best version still being forged.</span></li>
+      <li onclick="tog(this)"><div class="cbox"></div><span class="ctext">My story is not finished. What comes next is still being written — by my decisions, starting today.</span></li>
+    </ul>
+  </div>
+
+  <div class="ws-field">
+    <label class="ws-label">Of those truths — which one do you need to hear the most right now, and why?</label>
+    <textarea class="ws-textarea" placeholder="Write it out. Let it land."></textarea>
+  </div>
+
+  <!-- UNLEASH -->
+  <div class="section-hdr" style="margin-top:3rem;">
+    <div class="section-num">03</div>
+    <h2 class="h2"><span class="gold">UNLEASH</span><br>THE NEW MAN</h2>
+  </div>
+  <p class="body">The new man doesn't appear automatically. He is forged — through ownership, community, accountability, and decision. He looks nothing like the man who entered the storm. He leads differently. He loves differently. He knows the cost of avoidance. He doesn't repeat what he never examined.</p>
+
+  <div class="truth-block" data-label="The New Man">
+    <h4>Build His Profile</h4>
+    <p style="margin-bottom:1rem;">The unleashed man is not theoretical. He is specific. Define him below.</p>
+    <div class="ws-field"><label class="ws-label">How he leads his home and children:</label><textarea class="ws-textarea" placeholder="What does his fatherhood and leadership look like in practice?"></textarea></div>
+    <div class="ws-field"><label class="ws-label">How he handles conflict and hard conversations:</label><input class="ws-input" type="text" placeholder="He doesn't avoid — he..."></div>
+    <div class="ws-field"><label class="ws-label">What he is building (identity, business, mission, legacy):</label><textarea class="ws-textarea" placeholder="What is the new man working toward that the old man wasn't?"></textarea></div>
+    <div class="ws-field"><label class="ws-label">Who is in his corner — the community that sharpens him:</label><input class="ws-input" type="text" placeholder="Brotherhood. Mentors. Accountability. Name them."></div>
+    <div class="ws-field"><label class="ws-label">One word that defines the new man:</label><input class="ws-input" type="text" placeholder="One word. Own it."></div>
+  </div>
+
+  <div class="scripture">
+    <p class="verse">"The thief comes only to steal and kill and destroy. I came that they may have life, and have it abundantly."</p>
+    <p class="ref">— John 10:10</p>
+  </div>
+
+  <div class="next-section">
+    <button class="btn btn-gold btn-full" onclick="go('s-declaration')">NEXT: SPEAK YOUR DECLARATION →</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: DECLARATION
+═══════════════════════════════════════════════ -->
+<div class="screen" id="s-declaration">
+<div class="wrap pt pb">
+  <button class="back-btn" onclick="go('s-unlocks')">← Back</button>
+  <span class="eyebrow" style="margin-top:1.5rem;">The Declaration</span>
+  <h1 class="h1">SAY IT.<br><span class="gold">MEAN IT.<br>MOVE.</span></h1>
+  <div class="gold-rule"></div>
+  <p class="body" style="margin-bottom:1.5rem;">Words spoken over yourself shape who you become. This is not motivation. This is not a hype speech. This is a declaration — you're saying what's already true about the man you're choosing to be, even if you don't feel like him yet. Say it. Say it out loud. Let it land on the part of you that's still afraid.</p>
+
+  <div class="ws-field" style="margin-bottom:2rem;">
+    <label class="ws-label">Write your name to personalize your declaration</label>
+    <input class="ws-input" type="text" id="dname" placeholder="Your name..." oninput="updateDecl()" maxlength="40">
+  </div>
+
+  <div class="decl-box" id="declBox">
+    <p class="decl-text">
+      <span class="decl-line">I, <strong id="dn">______</strong>, am not defined by my divorce.</span>
+      <span class="decl-line">I am not a casualty. I am not a victim. I am not the worst thing that happened in that marriage.</span>
+      <span class="decl-line">I am a man who led — and a man who will own every part of how he led here.</span>
+      <span class="decl-line">I look at my percentage. I do not shrink from it. <strong>I own 100% of my portion.</strong></span>
+      <span class="decl-line">I am unlearning the lies that drove me here — the ones I believed about strength, about manhood, about what I was allowed to need.</span>
+      <span class="decl-line">I am unlocking the truth of who I was built to be — a truth that was never contingent on her staying.</span>
+      <span class="decl-line"><strong>I am unleashing a man this season was designed to produce.</strong></span>
+      <span class="decl-line">I will not walk this alone. I will not stay stuck. I will not repeat what I have not examined.</span>
+      <span class="decl-line">I will lead my children not from guilt, but from grounded identity.</span>
+      <span class="decl-line">My story is not over. My God is not finished. My best chapters are still ahead.</span>
+      <span class="decl-line" style="margin-top:1rem;"><strong>I am unstuck. Starting now.</strong></span>
+    </p>
+  </div>
+
+  <div class="ws-field" style="margin-top:2rem;">
+    <label class="ws-label">Add your own line — what do you need to declare that isn't already here?</label>
+    <input class="ws-input" type="text" placeholder="I also declare that...">
+  </div>
+
+  <div class="ws-field">
+    <label class="ws-label">The date I stood in front of this mirror and chose to move forward:</label>
+    <input class="ws-input" type="text" id="declDate" placeholder="Today's date...">
+  </div>
+
+  <div class="scripture" style="margin-top:2.5rem;">
+    <p class="verse">"For I know the plans I have for you, declares the Lord — plans to prosper you and not to harm you, plans to give you a future and a hope."</p>
+    <p class="ref">— Jeremiah 29:11</p>
+  </div>
+
+  <p class="body" style="text-align:center;margin:2rem 0;font-style:italic;color:var(--bone-dim);">You've done the work. Now it's time to move. Don't let this tool be the end — let it be the beginning.</p>
+
+  <div class="next-section">
+    <button class="btn btn-gold btn-full" onclick="go('s-cta')" style="font-size:1.2rem;padding:1.2rem;">I'M READY TO GET UNSTUCK →</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: CTA
+═══════════════════════════════════════════════ -->
+<div class="screen" id="s-cta">
+<div class="wrap pt pb" style="text-align:center;">
+  <span class="eyebrow">You Made It Here. Don't Stop Here.</span>
+  <div class="gold-rule center"></div>
+  <h1 class="h1">WHAT COMES<br><span class="gold">NEXT</span></h1>
+
+  <p class="body" style="max-width:520px;margin:1.5rem auto 3rem;">The mirror showed you what's real. Now it's time to do something with it. You don't have to figure out the next chapter alone — that's not stoicism. That's stubbornness. And stubbornness has already cost you enough.</p>
+
+  <div class="card card-gold" style="max-width:520px;margin:0 auto 1.5rem;text-align:left;">
+    <span class="eyebrow">Primary — For Men Ready to Move Now</span>
+    <h2 class="h2" style="margin-top:.75rem;">BOOK YOUR<br>STRATEGY CALL</h2>
+    <p class="body" style="font-size:1rem;margin-bottom:1.75rem;">One conversation. Zero fluff. We identify where you are, what's keeping you there, and what it's going to take to move — together. This is what getting unstuck looks like on purpose. No motivational speeches. No generic advice. Just a man who's been in it and a system that works.</p>
+    <a href="https://mrunstuck.com/start" target="_blank" class="btn btn-gold btn-full">BOOK AT MRUNSTUCK.COM/START →</a>
+  </div>
+
+  <div class="card" style="max-width:520px;margin:0 auto 1.5rem;text-align:left;">
+    <span class="eyebrow">Secondary — Start with Brotherhood</span>
+    <h2 class="h2" style="margin-top:.75rem;">JOIN THE UNSTUCK<br>BROTHERHOOD</h2>
+    <p class="body" style="font-size:1rem;margin-bottom:1.75rem;">You said you won't walk this alone. Prove it. The Brotherhood is a free community of men who are done being stuck — in identity, business, and life. It's not a support group. It's a war room. Start there.</p>
+    <a href="https://joinunstuck.com" target="_blank" class="btn btn-ghost btn-full">JOIN FREE AT JOINUNSTUCK.COM →</a>
+  </div>
+
+  <div class="hr" style="max-width:520px;margin:2rem auto;"></div>
+
+  <p class="body" style="font-style:italic;color:var(--bone-dim);max-width:480px;margin:0 auto 1rem;font-size:1rem;">"We're not motivational. We're <span class="gold">irritational</span>. Conflict brings transformation. And we don't let that happen in isolation."</p>
+  <p class="mono" style="color:var(--bone-dim);font-size:.62rem;letter-spacing:.15em;">@MRUNSTUCK</p>
+
+  <div class="hr" style="max-width:520px;margin:2.5rem auto 2rem;"></div>
+
+  <!-- EMAIL RESULTS -->
+  <div class="card" style="max-width:520px;margin:0 auto 2rem;text-align:left;border-color:var(--ash);" id="results-block">
+    <span class="eyebrow">Get Your Results Delivered</span>
+    <h3 class="h3" style="margin:.75rem 0 .5rem;">YOUR MIRROR RESULTS<br><span class="gold">SENT TO YOUR INBOX</span></h3>
+    <p class="body" style="font-size:.97rem;margin-bottom:1.5rem;">We're compiling your phase, your ownership percentage, and your declaration into a summary — so you can reference it, share it with an accountability partner, or bring it to your strategy call.</p>
+    <div id="results-sent-msg" style="display:none;padding:1.25rem;background:rgba(201,168,76,.08);border:1px solid var(--gold-dim);text-align:center;">
+      <p style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;">✓ &nbsp;Results queued for delivery</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bone);margin-top:.5rem;" id="results-email-confirm"></p>
+    </div>
+    <div id="results-form">
+      <div class="ws-field" style="margin-bottom:1rem;">
+        <label class="ws-label">Confirm your email</label>
+        <input class="ws-input" type="email" id="results-email" placeholder="Your email..." autocomplete="email">
+      </div>
+      <button class="btn btn-ghost btn-full" onclick="sendResults()" style="font-size:.95rem;">SEND MY RESULTS →</button>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem;">
+    <button class="back-btn" onclick="go('s-phase')" style="margin:0 auto;justify-content:center;">← Restart / Share This Tool</button>
+  </div>
+  <p class="mono" style="color:var(--smoke);font-size:.55rem;margin-top:2rem;letter-spacing:.18em;">MRUNSTUCK.COM · @MRUNSTUCK</p>
+</div>
+</div>
+
+
+<script>
+// ── STATE ──
+let phase = null;
+let userName = '';
+let userEmail = '';
+const SCREENS = ['s-phase','s-content','s-gate','s-ownership','s-unlocks','s-declaration','s-cta'];
+const PROG = {
+  's-phase':8,'s-content':30,'s-gate':46,'s-ownership':58,'s-unlocks':74,'s-declaration':90,'s-cta':100
+};
+const STEPS = {
+  's-phase':'Step 1 — Phase','s-content':'Step 2 — Mirror','s-gate':'Your Name','s-ownership':'Step 3 — Ownership','s-unlocks':'Step 4 — Framework','s-declaration':'Step 5 — Declaration','s-cta':'Complete'
+};
+let cur = 's-phase';
+
+// Plain events for whatever analytics the page carries. Never blocks the tool.
+function track(name, data){ try{ (window.dataLayer = window.dataLayer || []).push(Object.assign({ event: name }, data || {})); }catch(e){} }
+const PHASE_NAMES = {1:'Phase I — The Storm Approaching', 2:'Phase II — The Fire', 3:'Phase III — The Aftermath'};
+
+// First screen: one tap on a phase goes straight to his mirror. No email yet.
+function chooseFirst(n){
+  track('mirror_phase_pick', { phase: n });
+  pickPhase(n);
+  enterPhase();
+}
+// The ask comes after he has seen his mirror, right before the part where he writes.
+function toOwnership(){
+  if(userEmail){ go('s-ownership'); return; }
+  track('mirror_gate_view', { phase: phase });
+  const tag = document.getElementById('gate-phase');
+  if(tag && phase) tag.textContent = PHASE_NAMES[phase];
+  go('s-gate');
+  setTimeout(()=>{ const f = document.getElementById('intake-name'); if(f) f.focus({ preventScroll:true }); }, 80);
+}
+document.addEventListener('keydown', e=>{
+  if((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('phase-card')){ e.preventDefault(); e.target.click(); }
+  if(e.key === 'Enter' && e.target && (e.target.id === 'intake-name' || e.target.id === 'intake-email') && cur === 's-gate'){ e.preventDefault(); submitIntake(); }
+});
+
+// ── INTAKE SUBMIT ──
+function submitIntake(){
+  const nameEl = document.getElementById('intake-name');
+  const emailEl = document.getElementById('intake-email');
+  const errName = document.getElementById('err-name');
+  const errEmail = document.getElementById('err-email');
+  let valid = true;
+
+  errName.style.display='none';
+  errEmail.style.display='none';
+
+  if(!nameEl.value.trim()){
+    errName.style.display='block';
+    valid=false;
+  }
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRx.test(emailEl.value.trim())){
+    errEmail.style.display='block';
+    valid=false;
+  }
+  if(!valid) return;
+
+  userName = nameEl.value.trim();
+  userEmail = emailEl.value.trim();
+
+  // Pre-fill results email and declaration name
+  const re = document.getElementById('results-email');
+  if(re) re.value = userEmail;
+  const dn = document.getElementById('dname');
+  if(dn){ dn.value = userName; updateDecl(); }
+
+  // ── FIRE INTAKE WEBHOOK (lead capture) ──
+  fireWebhook('intake', {
+    event: 'mirror_intake',
+    first_name: userName,
+    email: userEmail,
+    source: 'The Mirror — Divorce Reckoning Tool',
+    phase: PHASE_NAMES[phase] || 'Not selected',
+    capture_point: 'after_mirror',
+    url: window.location.href,
+    timestamp: new Date().toISOString()
+  });
+  track('mirror_gate_submit', { phase: phase });
+
+  go('s-ownership');
+}
+
+// ── CENTRAL WEBHOOK DISPATCHER ──
+function fireWebhook(type, payload){
+  const INTAKE_WEBHOOK  = 'https://services.leadconnectorhq.com/hooks/4Hj0A6ZJ02zkgLvAo6IZ/webhook-trigger/d62fa0c8-949c-417f-84bc-d746e3770b4d';
+  const RESULTS_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/4Hj0A6ZJ02zkgLvAo6IZ/webhook-trigger/d62fa0c8-949c-417f-84bc-d746e3770b4d';
+  const url = type === 'intake' ? INTAKE_WEBHOOK : RESULTS_WEBHOOK;
+  if(!url) return;
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
+// ── COLLECT ALL WORKSHEET ANSWERS ──
+function collectAllAnswers(){
+  const phaseNames = {1:'Phase I — The Storm Approaching', 2:'Phase II — The Fire', 3:'Phase III — The Aftermath'};
+  const phaseName  = phaseNames[phase] || 'Not selected';
+  const pct        = document.getElementById('ownSlider') ? document.getElementById('ownSlider').value : '0';
+  const declName   = document.getElementById('dn')        ? document.getElementById('dn').textContent : userName;
+  const declDate   = document.getElementById('declDate')  ? document.getElementById('declDate').value
+                     : new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+
+  // ── Collect labeled worksheet responses ──
+  const wsResponses = [];
+  document.querySelectorAll('.ws-field, .reflect').forEach(el => {
+    const labelEl = el.querySelector('.ws-label, .reflect-prompt');
+    const inputEl = el.querySelector('input.ws-input, textarea.ws-textarea, textarea');
+    if(!labelEl || !inputEl || !inputEl.value.trim()) return;
+    // Skip intake fields and declaration name
+    const id = inputEl.id || '';
+    if(['intake-name','intake-email','dname','declDate','results-email'].includes(id)) return;
+    wsResponses.push({ q: labelEl.textContent.trim(), a: inputEl.value.trim() });
+  });
+
+  // ── Collect checked checklist items ──
+  const checkedItems = [];
+  document.querySelectorAll('.check-list li.done .ctext').forEach(el => {
+    checkedItems.push(el.textContent.trim());
+  });
+
+  // ── Collect selected patterns ──
+  const selectedPatterns = [];
+  document.querySelectorAll('.pattern-row.selected').forEach(row => {
+    const title = row.querySelector('.pattern-text strong');
+    const desc  = row.querySelector('.pattern-text p');
+    if(title) selectedPatterns.push(title.textContent.trim() + (desc ? ' — ' + desc.textContent.trim() : ''));
+  });
+
+  // ── Transformation score (Phase 3 only) ──
+  const scoreEl = document.querySelector('.score-num');
+  const tierEl  = document.querySelector('.score-tier');
+  const tierDescEl = document.querySelector('.score-tier-desc');
+  const trScore    = scoreEl    ? scoreEl.textContent.trim()    : null;
+  const trTier     = tierEl     ? tierEl.textContent.trim()     : null;
+  const trTierDesc = tierDescEl ? tierDescEl.textContent.trim() : null;
+
+  // ── BUILD FORMATTED NOTES BLOCK ──
+  const D  = '==========================';
+  const d  = '--------------------------';
+  const nl = '\n';
+
+  let notes = '';
+  notes += D + nl;
+  notes += 'THE MIRROR RESULTS' + nl;
+  notes += D + nl;
+  notes += nl;
+  notes += `Date:            ${declDate}` + nl;
+  notes += `Name:            ${declName}` + nl;
+  notes += `Email:           ${userEmail}` + nl;
+  notes += nl;
+  notes += d + nl;
+  notes += 'PHASE + OWNERSHIP' + nl;
+  notes += d + nl;
+  notes += `Phase Selected:  ${phaseName}` + nl;
+  notes += `Ownership %:     ${pct}%` + nl;
+  notes += `Owns 100% of:    ${pct}% — his portion, fully.` + nl;
+  notes += nl;
+
+  if(trScore){
+    notes += d + nl;
+    notes += 'TRANSFORMATION AUDIT (Phase III)' + nl;
+    notes += d + nl;
+    notes += `Score:           ${trScore}` + nl;
+    notes += `Tier:            ${trTier}` + nl;
+    if(trTierDesc){
+      notes += `Assessment:      ${trTierDesc}` + nl;
+    }
+    notes += nl;
+  }
+
+  if(checkedItems.length){
+    notes += d + nl;
+    notes += 'PATTERNS ACKNOWLEDGED' + nl;
+    notes += d + nl;
+    checkedItems.forEach(item => { notes += `✓  ${item}` + nl; });
+    notes += nl;
+  }
+
+  if(selectedPatterns.length){
+    notes += d + nl;
+    notes += 'CORE PATTERNS IDENTIFIED' + nl;
+    notes += d + nl;
+    selectedPatterns.forEach(p => { notes += `•  ${p}` + nl; });
+    notes += nl;
+  }
+
+  if(wsResponses.length){
+    notes += d + nl;
+    notes += 'WORKSHEET RESPONSES' + nl;
+    notes += d + nl;
+    wsResponses.forEach(({q, a}) => {
+      notes += `Q: ${q}` + nl;
+      notes += `A: ${a}` + nl;
+      notes += nl;
+    });
+  }
+
+  notes += d + nl;
+  notes += 'DECLARATION' + nl;
+  notes += d + nl;
+  notes += `Signed:  ${declName}` + nl;
+  notes += `"I, ${declName}, am not defined by my divorce.` + nl;
+  notes += ` I own 100% of my ${pct}%.` + nl;
+  notes += ` I am unlearning the lies. Unlocking the truths.` + nl;
+  notes += ` Unleashing the new man. I am unstuck. Starting now."` + nl;
+  notes += `Status:  COMPLETE` + nl;
+  notes += nl;
+  notes += D + nl;
+  notes += 'Source: The Mirror — Divorce Reckoning Tool' + nl;
+  notes += 'mrunstuck.com | @mrunstuck' + nl;
+  notes += D + nl;
+
+  return {
+    phaseName,
+    pct,
+    declName,
+    declDate,
+    checkedItems,
+    selectedPatterns,
+    trScore,
+    trTier,
+    worksheetResponses: wsResponses,
+    notes
+  };
+}
+
+function go(id){
+  document.getElementById(cur).classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  cur = id;
+  window.scrollTo(0,0);
+  document.getElementById('progFill').style.width = (PROG[id]||0)+'%';
+  document.getElementById('navStep').textContent = STEPS[id]||'';
+}
+
+function pickPhase(n){
+  phase = n;
+  document.querySelectorAll('.phase-card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('pc'+n).classList.add('sel');
+  document.getElementById('phase-go').style.display='block';
+}
+
+function enterPhase(){
+  if(!phase) return;
+  go('s-content');
+  document.querySelectorAll('.phase-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('p'+phase).classList.add('active');
+}
+
+// ── TOGGLE CHECKBOX ──
+function tog(li){
+  li.classList.toggle('done');
+  const b = li.querySelector('.cbox');
+  b.classList.toggle('on');
+}
+
+// ── PATTERN SELECT ──
+function togglePat(row){
+  row.classList.toggle('selected');
+}
+
+// ── SCALE RATING ──
+function rate(btn, grp, val){
+  btn.closest('.scale-btns').querySelectorAll('.scale-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  calcTRScore();
+}
+
+function calcTRScore(){
+  const groups = ['tr1','tr2','tr3','tr4','tr5'];
+  let total = 0, filled = 0;
+  groups.forEach(g=>{
+    const active = document.querySelector(`[data-group="${g}"] .scale-btn.active`);
+    if(active){ total += parseInt(active.textContent); filled++; }
+  });
+  const el = document.getElementById('tr-score-display');
+  if(!el) return;
+  if(filled === 5){
+    el.style.display='block';
+    let tier, desc;
+    if(total<=10){tier='SURVIVOR MODE';desc='You haven\'t done the work yet — and somewhere you know it. That\'s not a verdict, it\'s a starting line.';}
+    else if(total<=15){tier='BEGINNING THE WORK';desc='You\'ve started. There\'s real ground still to cover. The awareness is there. The intentional action follows.';}
+    else if(total<=20){tier='IN THE PROCESS';desc='Solid progress. You\'re doing the work in some areas. The gaps are visible and closeable. Keep going.';}
+    else{tier='TRANSFORMED';desc='You\'ve done serious work. The goal now is sustaining and deepening it — and bringing other men with you.';}
+    el.innerHTML = `<div class="score-display"><div class="score-num">${total}/25</div><div class="score-label">Your Transformation Score</div><div class="score-tier">${tier}</div><div class="score-tier-desc">${desc}</div></div>`;
+  }
+}
+
+// ── OWNERSHIP SLIDER ──
+const OWN_MSGS = [
+  {max:20, color:'#8a6e30', text:'That\'s a starting point. Acknowledging even 5–20% takes something — especially when the wound is fresh. But here\'s the question: are you being honest, or are you protecting yourself? We\'re not asking you to take all the blame. We\'re asking you to take <em>your</em> blame. Sit with that number. Is it real, or is it comfortable?'},
+  {max:45, color:'#C9A84C', text:'Now we\'re in honest territory. 25–45% is where most men land when they do real work. You know you contributed. You know the patterns. You know the moments you should have led differently. That\'s not defeat — that\'s the beginning of ownership. 100% of that percentage is yours. Let\'s work with it.'},
+  {max:50, color:'#C9A84C', text:'Equal footing. Fifty percent. That\'s a powerful and rare place to stand. It means you\'re not weaponizing blame and you\'re not absorbing it all. You\'re being honest that two people were in this, and you were one of them. Build from that. Own every inch of your half.'},
+  {max:75, color:'#e8c96a', text:'You\'re carrying a heavy percentage. That\'s not weakness — honesty at this level is rare and it\'s required for transformation. Don\'t let it become self-punishment. This is not about guilt. It\'s about ownership. The man who can say "I led the majority of this here" is the man closest to breakthrough. Because ownership means agency. Agency means change is possible.'},
+  {max:95, color:'#e8c96a', text:'That\'s a significant weight to carry. If you truly believe it — and not because you\'ve been conditioned to shrink — that\'s remarkable self-awareness. But check yourself: ownership is not martyrdom. We\'re not looking for you to absorb all fault to feel absolved. Own what\'s real. Whatever that number is, it\'s enough to work with. And work, we will.'}
+];
+
+function slide(v){
+  v = parseInt(v);
+  document.getElementById('sliderPct').textContent = v+'%';
+  const m = OWN_MSGS.find(o=>v<=o.max)||OWN_MSGS[OWN_MSGS.length-1];
+  document.getElementById('sliderPct').style.color = m.color;
+  document.getElementById('ownMsgTxt').innerHTML = m.text;
+}
+slide(30);
+
+// ── DECLARATION ──
+function updateDecl(){
+  const n = document.getElementById('dname').value.trim()||'______';
+  document.getElementById('dn').textContent = n;
+}
+
+// ── AUTO DATE ──
+window.addEventListener('load',()=>{
+  const d = document.getElementById('declDate');
+  if(d){ const now=new Date(); d.value=now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
+});
+
+// ── SEND RESULTS ──
+function sendResults(){
+  const emailEl = document.getElementById('results-email');
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailEl || !emailRx.test(emailEl.value.trim())){
+    emailEl.style.borderBottomColor='#b05050';
+    return;
+  }
+  const email = emailEl.value.trim();
+  userEmail = email;
+
+  const data = collectAllAnswers();
+
+  // ── FIRE RESULTS WEBHOOK ──
+  // All values plain strings — no arrays or objects so GHL renders cleanly
+  fireWebhook('results', {
+    event:                'mirror_completed',
+    first_name:           data.declName,
+    email:                email,
+    phase:                data.phaseName,
+    ownership_pct:        data.pct + '%',
+    transformation_score: data.trScore || 'N/A',
+    transformation_tier:  data.trTier  || 'N/A',
+    patterns_identified:  data.selectedPatterns.length ? data.selectedPatterns.join(' | ') : 'None selected',
+    items_acknowledged:   data.checkedItems.length     ? data.checkedItems.join(' | ')     : 'None selected',
+    contact_notes:        data.notes,
+    source:               'The Mirror — Divorce Reckoning Tool',
+    url:                  window.location.href,
+    completed_at:         new Date().toISOString()
+  });
+  track('mirror_results_sent', { phase: phase });
+
+  // Show confirmation
+  document.getElementById('results-form').style.display='none';
+  document.getElementById('results-sent-msg').style.display='block';
+  document.getElementById('results-email-confirm').textContent =
+    'Your results are on their way. Check your inbox — and if you don\'t see it in a few minutes, check your spam folder.';
+}
+</script>
+</body>
+</html>
